@@ -1,0 +1,53 @@
+
+<body style=" background-size:cover;
+ height:100%;
+  min-width: 1024px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow-y:scroll">
+        <div class='col-sm-2'>
+            <nav-menu></nav-menu>
+        </div>
+    <div style="display:flex">
+        <div class="header-row">
+            <h1>Published Metric's</h1>
+            <form>
+                <div class="row">
+                    <label> Search:</label>
+                    <input class="form-control" placeholder="Search Metric ID" name="SearchID" [(ngModel)]="SearchID">
+                    <button class="btn btn-info"><span class="glyphicon glyphicon-search" (click)="search()"> Search</span></button>
+                    <button *ngIf="Search" class="btn btn-success" (click)="back()"><span class="glyphicon glyphicon-arrow-left"> Back</span></button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+    
+
+        <div style="display:flex" class="col-lg-offset-2">
+
+                <table class="table table-hover" style="width: 75%; height:100%" *ngIf="svc.publishedMetrics">
+                    <thead>
+                        <tr>
+                            <th>Lexicon Name</th>
+                            <th>Hide</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let metric of svc.publishedMetrics">
+                            <td>{{ metric.lexicon_name }}</td>
+                            <td>
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input  *ngIf="metric.id != -1" type="checkbox" value="{{metric.id}}" class="form-check-input" data-toggle="tooltip" title="Hide" style="cursor:pointer">
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            </body>
+

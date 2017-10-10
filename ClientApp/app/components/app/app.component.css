@@ -1,0 +1,14 @@
+@media (max-width: 767px) {
+    /* On small screens, the nav menu spans the full width of the screen. Leave a space for it. */
+    .body-content {
+        padding-top: 50px;
+    }
+}
+
+.header-row {
+    display: flex !important;
+    flex-basis: calc(33.33333333333333% - 9px) !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    order: initial !important;
+}
