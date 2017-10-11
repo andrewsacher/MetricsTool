@@ -7,7 +7,7 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './components/app/app.component';
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
 import { PublishedComponent } from './components/Published/published.component';
-import { FetchDataComponent } from './components/fetchdata/fetchdata.component';
+import { DataScrapingComponent } from './components/DataScraping/dataScraping.component';
 import { CounterComponent } from './components/counter/counter.component';
 import { LoginComponent } from './components/Login/Login.component';
 import { ServiceMaster } from './components/Services/ServiceMaster';
@@ -18,7 +18,7 @@ import { LoggedInGuard } from './components/Services/LoggedInGuard';
         AppComponent,
         NavMenuComponent,
         CounterComponent,
-        FetchDataComponent,
+        DataScrapingComponent,
         PublishedComponent,
         LoginComponent
     ],
@@ -30,7 +30,7 @@ import { LoggedInGuard } from './components/Services/LoggedInGuard';
             { path: '', redirectTo: 'login', pathMatch: 'full' },
             { path: 'published', component: PublishedComponent, canActivate: [LoggedInGuard] },
             { path: 'counter', component: CounterComponent, canActivate: [LoggedInGuard] },
-            { path: 'fetch-data', component: FetchDataComponent, canActivate: [LoggedInGuard] },
+            { path: 'data-scraping', component: DataScrapingComponent, canActivate: [LoggedInGuard] },
             { path: 'login', component: LoginComponent },
             { path: '**', redirectTo: 'login' }
         ])
