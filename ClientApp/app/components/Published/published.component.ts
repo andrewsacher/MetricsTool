@@ -10,9 +10,9 @@ import { Metric } from '../Models/Models';
 export class PublishedComponent {
     svc: ServiceMaster;
     http: Http;
-    test: Metric[];
     SearchID: string;
     Search: boolean;
+    metricEdit: Metric;
     constructor(service: ServiceMaster, http: Http)
     {
         this.svc = service;
@@ -39,5 +39,18 @@ export class PublishedComponent {
         this.Search = false;
         this.SearchID = "";
         this.svc.getPublished();
+    }
+
+    async SelectedModal(m: Metric)
+    {
+        await this.svc.getPublishedEdit(m.id.toString()).then(async response => {
+            this.metricEdit = await response 
+
+        }); 
+        
+    }
+
+    clearModal() {
+        this.svc.publishedEditMetric = new Metric();
     }
 }

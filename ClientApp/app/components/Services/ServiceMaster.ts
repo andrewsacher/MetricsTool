@@ -12,12 +12,17 @@ export class ServiceMaster {
     public loggedIn: boolean
     public response: string;
     public publishedMetrics: Metric[];
-    public i: number;
-    public noneFoundPublished: boolean
+    public stagingMetrics: Metric[];
+    public stagingURL: string;
+    public publishedURL: string;
+    public publishedEditMetric: Metric;
+   
 
     constructor(http: Http, private router: Router) {
         this.http = http;
         this.loggedIn = false;
+        this.stagingURL = 'http://usafacts-api-staging.azurewebsites.net/api/v2/metrics';
+        this.publishedURL = 'http://usafacts-api.azurewebsites.net/api/v2/metrics';
     }
 
     public async login(email: string, password: string): Promise<boolean> {
@@ -57,8 +62,7 @@ export class ServiceMaster {
         headers.append('Content-Type', 'application/json');
         headers.append('Authorization', 'Basic d9448c61-936d-4717-8aa8-cba9a4903d57');
         let options = new RequestOptions({ headers: headers });
-        var url = 'http://usafacts-api.azurewebsites.net/api/v2/metrics/'
-        this.http.get(url, options).subscribe(result => {
+        this.http.get(this.publishedURL +'/', options).subscribe(result => {
             this.publishedMetrics = result.json();
             
 
@@ -68,24 +72,51 @@ export class ServiceMaster {
 
     public getPublishedSearch(id: String) {
         var headers = new Headers();
-        3
+        
         headers.append('Content-Type', 'application/json');
         headers.append('Authorization', 'Basic d9448c61-936d-4717-8aa8-cba9a4903d57');
         let options = new RequestOptions({ headers: headers });
-        var url = 'http://usafacts-api.azurewebsites.net/api/v2/metrics?ids='
-        this.http.get(url + id, options).subscribe(result => {
-            if (result.bytesLoaded == undefined) {
-                this.publishedMetrics = result.json();
-                this.publishedMetrics[0] = new Metric();
-                this.publishedMetrics[0].lexicon_name = "No Metrics Found";
-                this.publishedMetrics[0].id = -1
+        this.http.get(this.publishedURL + '?ids=' + id, options).subscribe(data => {
+            
+                this.publishedMetrics = data.json();  
+        });
+    }
 
-            }
-            else {
-                this.publishedMetrics = result.json();
-            }
-            
-            
+    public async getPublishedEdit(id: String): Promise<Metric> {
+        var headers = new Headers();
+
+        headers.append('Content-Type', 'application/json');
+        headers.append('Authorization', 'Basic d9448c61-936d-4717-8aa8-cba9a4903d57');
+        let options = new RequestOptions({ headers: headers });
+        return await this.http.get(this.publishedURL + '/' + id, options).toPromise()
+            .then(response => response.json() as Metric);
+        
+    }
+
+    public getStaging() {
+        var headers = new Headers();
+
+
+        headers.append('Content-Type', 'application/json');
+        headers.append('Authorization', 'Basic d9448c61-936d-4717-8aa8-cba9a4903d57');
+        let options = new RequestOptions({ headers: headers });
+        this.http.get(this.stagingURL + '/', options).subscribe(result => {
+            this.stagingMetrics = result.json();
+
+
+
+        });
+    }
+
+    public getStagingSearch(id: String) {
+        var headers = new Headers();
+        
+        headers.append('Content-Type', 'application/json');
+        headers.append('Authorization', 'Basic d9448c61-936d-4717-8aa8-cba9a4903d57');
+        let options = new RequestOptions({ headers: headers });
+        this.http.get(this.stagingURL + '?ids=' + id, options).subscribe(data => {
+
+            this.stagingMetrics = data.json();
         });
     }
 }

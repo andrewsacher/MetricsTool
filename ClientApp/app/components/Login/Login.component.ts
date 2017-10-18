@@ -30,7 +30,7 @@ export class LoginComponent {
             this.wrongLogin = !log
             if (log)
             {
-                this.router.navigate(['/fetch-data'])
+                this.router.navigate(['/data-scraping'])
             }
             
             
