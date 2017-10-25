@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ServiceMaster } from '../Services/ServiceMaster';
 import { Http } from '@angular/http';
-import { Metric } from '../Models/Models'; 
+import { Metric, Source } from '../Models/Models'; 
 
 @Component({
     selector: 'staging',
@@ -12,6 +12,8 @@ export class StagingComponent {
     http: Http;
     SearchID: string;
     Search: boolean;
+    metricEdit: Metric;
+    sources: Source[]
     constructor(service: ServiceMaster, http: Http) {
         this.svc = service;
         this.http = http;
@@ -19,7 +21,7 @@ export class StagingComponent {
     }
 
     ngOnInit() {
-        if (this.svc.publishedMetrics == null) {
+        if (this.svc.stagingMetrics == null) {
             this.svc.getStaging();
         }
 
@@ -34,6 +36,25 @@ export class StagingComponent {
     back() {
         this.Search = false;
         this.SearchID = "";
+        this.svc.getStaging();
+    }
+
+    async SelectedModal(m: Metric) {
+        await this.svc.getPublishedEdit(m.id.toString()).then(async response => {
+            this.metricEdit = await response
+
+        });
+        await this.svc.getStagingSource(m.id).then(async response => {
+            this.sources = await response
+        });
+
+    }
+    clearModal() {
+        this.metricEdit = new Metric();
+    }
+    submit()
+    {
+        this.svc.stagingPost(this.metricEdit);
         this.svc.getStaging();
     }
 }

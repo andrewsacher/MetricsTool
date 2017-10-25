@@ -3,7 +3,7 @@ import { Http } from '@angular/http';
 import { Headers, RequestOptions } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import 'rxjs/add/operator/toPromise';
-import { Metric } from '../Models/Models';
+import { Metric, Source } from '../Models/Models';
 
 @Injectable()
 export class ServiceMaster {
@@ -118,5 +118,50 @@ export class ServiceMaster {
 
             this.stagingMetrics = data.json();
         });
+    }
+
+    public async getStagingEdit(id: String): Promise<Metric> {
+        var headers = new Headers();
+
+        headers.append('Content-Type', 'application/json');
+        headers.append('Authorization', 'Basic d9448c61-936d-4717-8aa8-cba9a4903d57');
+        let options = new RequestOptions({ headers: headers });
+        return await this.http.get(this.stagingURL + '/' + id, options).toPromise()
+            .then(response => response.json() as Metric);
+
+    }
+
+    public stagingPost(m: Metric) {
+
+        var headers = new Headers();
+
+
+        headers.append('Content-Type', 'application/json');
+        headers.append('Authorization', 'Basic d9448c61-936d-4717-8aa8-cba9a4903d57');
+        let options = new RequestOptions({ headers: headers });
+
+        var url = this.stagingURL + '/' + m.id;
+        var body = JSON.stringify(m);
+        this.http.put(url, body, options).subscribe(
+            data => {
+                return true;
+            },
+            error => {
+                console.error("Error saving!");
+                //return Observable.throw(error);
+            }
+        );;
+    }
+
+    public async getStagingSource(MetricID: number): Promise<Source[]> {
+        var headers = new Headers();
+
+
+        headers.append('Content-Type', 'application/json');
+        headers.append('Authorization', 'Basic d9448c61-936d-4717-8aa8-cba9a4903d57');
+        let options = new RequestOptions({ headers: headers });
+
+        return await this.http.get("http://usafacts-api-staging.azurewebsites.net/api/v2/sources?ids=" + MetricID, options).toPromise()
+            .then(response => response.json() as Source[]);
     }
 }

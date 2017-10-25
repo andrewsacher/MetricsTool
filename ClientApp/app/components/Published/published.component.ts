@@ -51,6 +51,6 @@ export class PublishedComponent {
     }
 
     clearModal() {
-        this.svc.publishedEditMetric = new Metric();
+        this.metricEdit = new Metric();
     }
 }
