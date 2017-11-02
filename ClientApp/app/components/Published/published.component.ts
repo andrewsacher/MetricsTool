@@ -13,6 +13,7 @@ export class PublishedComponent {
     SearchID: string;
     Search: boolean;
     metricEdit: Metric;
+    metricsChecked: number[];
     constructor(service: ServiceMaster, http: Http)
     {
         this.svc = service;
@@ -52,5 +53,10 @@ export class PublishedComponent {
 
     clearModal() {
         this.metricEdit = new Metric();
+    }
+    hide()
+    {
+        this.metricsChecked = this.svc.publishedMetrics.filter(metric => metric.checked).map(metric => metric.id);
+        var i = 1;
     }
 }

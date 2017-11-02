@@ -14,7 +14,7 @@
         <div class="header-row">
             <h1>Published Metric's</h1>
             <form>
-                <div class="row">
+                <div class="row" style="padding-left:10px">
                     <label> Search:</label>
                     <input class="form-control" placeholder="Search Metric ID" name="SearchID" [(ngModel)]="SearchID">
                     <button class="btn btn-info"><span class="glyphicon glyphicon-search" (click)="search()"> Search</span></button>
@@ -46,7 +46,7 @@
                     <td>
                         <div class="form-check">
                             <label class="form-check-label">
-                                <input *ngIf="metric.id != -1" type="checkbox" value="{{metric.id}}" class="form-check-input" data-toggle="tooltip" title="Hide" style="cursor:pointer">
+                                <input *ngIf="metric.id != -1" type="checkbox" value="{{metric.id}}" [(ngModel)]="metric.checked" class="form-check-input" data-toggle="tooltip" title="Hide" style="cursor:pointer">
                             </label>
                         </div>
                     </td>
@@ -54,7 +54,7 @@
                 </tr>
                 <tr *ngIf="svc.publishedMetrics.length != 0">
                     <td></td>
-                    <td><button *ngIf="svc.publishedMetrics.length != 0" class="btn btn-primary">Hide Checked</button></td>
+                    <td><button *ngIf="svc.publishedMetrics.length != 0" (click)="hide()" class="btn btn-primary">Hide Checked</button></td>
                 </tr>
             </tbody>
             
@@ -65,83 +65,91 @@
             </form>
     </div>
 </body>
+<div id="myModalEdit" class="modal fade" role="dialog">
+    <div class="col-md-10 pull-right">
+        <div class="modal-content" style="width: 60%">
+            <div class="modal-dialog" role="document">
+                <div class="modal-header text-center row" *ngIf="metricEdit">
+                    <button type="button" class="close" data-dismiss="modal" (click)="clearModal()"><span style="color:#ff4444">&times;</span> </button>
+                    <h4 class="modal-title">Edit: {{metricEdit.name }}</h4>
 
+                </div>
+                <div class="modal-body" *ngIf="metricEdit">
 
-    <div id="myModalEdit" class="modal fade" role="dialog">
-        <div class="col-md-10 pull-right">
-            <div class="modal-content" style="width: 60%">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-header text-center row" *ngIf="metricEdit">
-                        <button type="button" class="close" data-dismiss="modal" (click)="clearModal()"><span style="color:#ff4444">&times;</span> </button>
-                        <h4 class="modal-title">Edit: {{metricEdit.name }}</h4>
-                        
-                    </div>
-                    <div class="modal-body" *ngIf="metricEdit">
+                    <form>
 
-                        <form>
-                            
-                            <div class="col-sm-8 col-sm-offest-1">
-                                <br>
-                                <div class="form-group label-floating">
-                                    <label style="width:30%" class="control-label">Name:</label><input class="form-control" type="text" name="lexicon_name" value="{{metricEdit.name}}" [(ngModel)]="metricEdit.name">
-                                </div>
+                        <div class="col-sm-8 col-sm-offest-1">
+                            <br>
+                            <div class="form-group label-floating">
+                                <label style="width:30%" class="control-label">Name:</label><input class="form-control" type="text" name="lexicon_name" value="{{metricEdit.name}}" [(ngModel)]="metricEdit.name">
                             </div>
-                            <div class="col-sm-4">
-                                <br>
-                                <div class="form-group label-floating">
-                                    <label style="width:30%" class="control-label">ID:</label><input class="form-control" type="text" name="id" value="{{metricEdit.id}}" [(ngModel)]="metricEdit.id">
-                                </div>
-                            </div>
-                            <div class="col-sm-6 col-sm-offest-1">
-                                <div class="form-group label-floating">
-                                    <label class="control-label">Slide Title:  </label><input class="form-control" type="text" name="slideTitle" value="{{metricEdit.slideTitle}}" [(ngModel)]="metricEdit.slideTitle">
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group label-floating">
-                                    <label class="control-label">Slide ID:  </label><input class="form-control" type="text" name="slideID" value="{{metricEdit.slideID}}" [(ngModel)]="metricEdit.slideID">
-                                </div>
-                            </div>
-                            <div class="col-sm-6 col-sm-offest-1">
-                                <div class="form-group label-floating">
-                                    <label class="control-label">X Label:  </label><input class="form-control" type="text" name="x_Type" value="{{metricEdit.x_type}}" [(ngModel)]="metricEdit.x_type">
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group label-floating">
-                                    <label class="control-label">Y Label:  </label><input class="form-control" type="text" name="y_Type" value="{{metricEdit.y_type}}" [(ngModel)]="metricEdit.y_type">
-                                </div>
-                            </div>
-                            <div class="col-sm-6 col-sm-offest-1">
-                                <div class="form-group label-floating">
-                                    <label style="width:30%" class="control-label"> Units:</label><input class="form-control" type="text" name="rounding_Unit" value="{{metricEdit.rounding_unit}}" [(ngModel)]="metricEdit.rounding_unit">
-                                </div>
-                            </div>
-                            <div class="col-sm-6 col-sm-offest-1">
-                                <div class="form-group label-floating">
-                                    <label style="width:30%" class="control-label">Sig Figs:</label><input class="form-control" type="text" name="sig_figs" value="{{metricEdit.sig_figs}}" [(ngModel)]="metricEdit.sig_figs">
-                                </div>
-                            </div>
-                            <div class="col-sm-12 col-sm-offest-1" *ngFor="let meta of metricEdit.meta">
-                                <div class="form-group label-floating">
-                                    <label style="width:30%" class="control-label">{{meta.type}}:</label><textarea rows="5" class="form-control" type="text" name="slide_id" value="{{meta.data}}" [(ngModel)]="meta.data"></textarea>
-                                </div>
-                            </div>
-                            <div class="col-sm-6 col-sm-offest-1" >
-                                <div class="form-group label-floating">
-                                    <label style="width:30%" class="control-label">Is Featured:  </label> <input type="checkbox" checked="{{metricEdit.is_featured}}" [(ngModel)]="metricEdit.is_featured" >
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <div class="pull-right">
-                            <button type="button" class="btn" style="background-color:#4285F4"  data-dismiss="modal" (click)="submit()">Submit</button>
-                            <button type="button" class="btn btn-danger " data-dismiss="modal" (click)="clearModal()">Close</button>
                         </div>
+                        <div class="col-sm-4">
+                            <br>
+                            <div class="form-group label-floating">
+                                <label style="width:30%" class="control-label">ID:</label><input class="form-control" type="text" name="id" value="{{metricEdit.id}}" [(ngModel)]="metricEdit.id">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-sm-offest-1">
+                            <div class="form-group label-floating">
+                                <label class="control-label">Slide Title:  </label><input class="form-control" type="text" name="slideTitle" value="{{metricEdit.slideTitle}}" [(ngModel)]="metricEdit.slideTitle">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group label-floating">
+                                <label class="control-label">Slide ID:  </label><input class="form-control" type="text" name="slideID" value="{{metricEdit.slideID}}" [(ngModel)]="metricEdit.slideID">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-sm-offest-1">
+                            <div class="form-group label-floating">
+                                <label class="control-label">X Label:  </label><input class="form-control" type="text" name="x_Type" value="{{metricEdit.x_type}}" [(ngModel)]="metricEdit.x_type">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group label-floating">
+                                <label class="control-label">Y Label:  </label><input class="form-control" type="text" name="y_Type" value="{{metricEdit.y_type}}" [(ngModel)]="metricEdit.y_type">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-sm-offest-1">
+                            <div class="form-group label-floating">
+                                <label style="width:30%" class="control-label"> Units:</label><input class="form-control" type="text" name="rounding_Unit" value="{{metricEdit.rounding_unit}}" [(ngModel)]="metricEdit.rounding_unit">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-sm-offest-1">
+                            <div class="form-group label-floating">
+                                <label style="width:30%" class="control-label">Sig Figs:</label><input class="form-control" type="text" name="sig_figs" value="{{metricEdit.sig_figs}}" [(ngModel)]="metricEdit.sig_figs">
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-sm-offest-1" *ngFor="let meta of metricEdit.meta">
+                            <div class="form-group label-floating">
+                                <label style="width:30%" class="control-label">{{meta.type}}:</label><textarea rows="5" class="form-control" type="text" name="data" value="{{meta.data}}" [(ngModel)]="meta.data"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-sm-20 col-sm-offest-1" *ngFor="let Source of sources">
+                            <div class="form-group label-floating">
+                                <label style="width:30%" class="control-label"><strong>Source URL's:</strong></label>
+                                <div class="col-sm-20 col-sm-offest-1" *ngFor="let s of Source.sources">
+                                    <div class="form-group label-floating">
+                                        <label style="width:30%" class="control-label"></label><textarea row="5" class="form-control" type="text" name="url" value="{{s.source}}" [(ngModel)]="s.source">: {{s.url}}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-sm-offest-1">
+                            <div class="form-group label-floating">
+                                <label style="width:30%" class="control-label">Is Featured:  </label> <input type="checkbox" name="isFeatured" checked="{{metricEdit.is_featured}}" [(ngModel)]="metricEdit.is_featured">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <br />
+                <div class="modal-footer">
+                    <div class="pull-right">
+                        <button type="button" class="btn" style="background-color:#4285F4" data-dismiss="modal" (click)="submit()">Submit</button>
+                        <button type="button" class="btn btn-danger " data-dismiss="modal" (click)="clearModal()">Close</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
+</div>

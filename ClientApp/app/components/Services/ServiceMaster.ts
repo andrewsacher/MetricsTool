@@ -21,7 +21,7 @@ export class ServiceMaster {
     constructor(http: Http, private router: Router) {
         this.http = http;
         this.loggedIn = false;
-        this.stagingURL = 'http://usafacts-api-staging.azurewebsites.net/api/v2/metrics';
+        this.stagingURL = 'http://simonpalsandbox.azurewebsites.net/api/v2/metrics';
         this.publishedURL = 'http://usafacts-api.azurewebsites.net/api/v2/metrics';
     }
 
@@ -32,7 +32,7 @@ export class ServiceMaster {
         headers.append('Content-Type', 'application/json');
         let options = new RequestOptions({ headers: headers });
 
-        var url = 'http://usafacts-api-staging.azurewebsites.net/api/v2/authentication';
+        var url = 'http://simonpalsandbox.azurewebsites.net/api/v2/authentication';
         return this.http.post(url, JSON.stringify({ email, password }), options).toPromise()
             .then(response => {
                 this.loggedIn = true;
@@ -140,7 +140,7 @@ export class ServiceMaster {
         headers.append('Authorization', 'Basic d9448c61-936d-4717-8aa8-cba9a4903d57');
         let options = new RequestOptions({ headers: headers });
 
-        var url = this.stagingURL + '/' + m.id;
+        var url = this.stagingURL + "/update";
         var body = JSON.stringify(m);
         this.http.put(url, body, options).subscribe(
             data => {
@@ -161,7 +161,7 @@ export class ServiceMaster {
         headers.append('Authorization', 'Basic d9448c61-936d-4717-8aa8-cba9a4903d57');
         let options = new RequestOptions({ headers: headers });
 
-        return await this.http.get("http://usafacts-api-staging.azurewebsites.net/api/v2/sources?ids=" + MetricID, options).toPromise()
+        return await this.http.get("http://simonpalsandbox.azurewebsites.net/api/v2/sources?ids=" + MetricID, options).toPromise()
             .then(response => response.json() as Source[]);
     }
 }

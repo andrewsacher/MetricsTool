@@ -15,7 +15,8 @@ export class Metric{
     public slideTitle: string;
     public children: number[];
     public hasChildren: boolean;
-    public meta: Meta[]
+    public meta: Meta[];
+    public checked: boolean;
 
 
 
