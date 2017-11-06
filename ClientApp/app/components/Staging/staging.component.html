@@ -125,7 +125,7 @@
                         </div>
                         <div class="col-sm-20 col-sm-offest-1" *ngFor="let Source of sources">
                         <div class="form-group label-floating">
-                            <label style="width:30%" class="control-label"><strong>Source URL's:</strong></label>
+                            <label style="width:30%" class="control-label"><strong>Source:</strong></label>
                             <div class="col-sm-20 col-sm-offest-1" *ngFor="let s of Source.sources">
                                 <div class="form-group label-floating">
                                     <label style="width:30%" class="control-label"></label><textarea row ="5"class="form-control" type="text" name="url" value="{{s.source}}" [(ngModel)]="s.source">: {{s.url}}</textarea>

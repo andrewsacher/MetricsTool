@@ -14,6 +14,7 @@ export class PublishedComponent {
     Search: boolean;
     metricEdit: Metric;
     metricsChecked: number[];
+    edited: boolean;
     constructor(service: ServiceMaster, http: Http)
     {
         this.svc = service;
@@ -57,6 +58,23 @@ export class PublishedComponent {
     hide()
     {
         this.metricsChecked = this.svc.publishedMetrics.filter(metric => metric.checked).map(metric => metric.id);
-        var i = 1;
+        this.svc.hideMetrics(this.metricsChecked);
+        this.svc.getPublished();
+        console.log("hiding" + this.metricsChecked.toString());
+        this.Search = false;
+        this.SearchID = "";
     }
-}
+
+    async submit() {
+        await this.svc.stagingPost(this.metricEdit).then(async response => {
+            this.edited = await response
+        })
+        
+        this.Search = false;
+        console.log("editing" + this.metricEdit.id.toString());
+        this.SearchID = "";
+        this.svc.getStaging();
+    }
+} 
+
+

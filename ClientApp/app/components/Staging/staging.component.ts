@@ -13,17 +13,17 @@ export class StagingComponent {
     SearchID: string;
     Search: boolean;
     metricEdit: Metric;
-    sources: Source[]
+    sources: Source[];
+    edited: boolean;
     constructor(service: ServiceMaster, http: Http) {
         this.svc = service;
         this.http = http;
-        this.Search = false
+        this.Search = false;
+        this.edited = false;
     }
 
     ngOnInit() {
-        if (this.svc.stagingMetrics == null) {
             this.svc.getStaging();
-        }
 
 
     }
@@ -52,9 +52,14 @@ export class StagingComponent {
     clearModal() {
         this.metricEdit = new Metric();
     }
-    submit()
+    async submit()
     {
-        this.svc.stagingPost(this.metricEdit);
+        await this.svc.stagingPost(this.metricEdit).then(async response => {
+            this.edited = await response
+        })
         this.svc.getStaging();
+        this.Search = false;
+        console.log("editing" + this.metricEdit.id.toString());
+        this.SearchID = "";
     }
 }

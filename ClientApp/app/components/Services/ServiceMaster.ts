@@ -4,6 +4,7 @@ import { Headers, RequestOptions } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import 'rxjs/add/operator/toPromise';
 import { Metric, Source } from '../Models/Models';
+import { toPromise } from "rxjs/operator/toPromise";
 
 @Injectable()
 export class ServiceMaster {
@@ -22,7 +23,7 @@ export class ServiceMaster {
         this.http = http;
         this.loggedIn = false;
         this.stagingURL = 'http://simonpalsandbox.azurewebsites.net/api/v2/metrics';
-        this.publishedURL = 'http://usafacts-api.azurewebsites.net/api/v2/metrics';
+        this.publishedURL = 'http://simonpalsandbox.azurewebsites.net/api/v2/metrics';
     }
 
     public async login(email: string, password: string): Promise<boolean> {
@@ -131,7 +132,7 @@ export class ServiceMaster {
 
     }
 
-    public stagingPost(m: Metric) {
+    public async stagingPost(m: Metric): Promise<boolean> {
 
         var headers = new Headers();
 
@@ -139,18 +140,19 @@ export class ServiceMaster {
         headers.append('Content-Type', 'application/json');
         headers.append('Authorization', 'Basic d9448c61-936d-4717-8aa8-cba9a4903d57');
         let options = new RequestOptions({ headers: headers });
-
+        var response = false;
         var url = this.stagingURL + "/update";
         var body = JSON.stringify(m);
         this.http.put(url, body, options).subscribe(
             data => {
-                return true;
+                response = true;
             },
             error => {
                 console.error("Error saving!");
                 //return Observable.throw(error);
             }
-        );;
+        );
+        return response;
     }
 
     public async getStagingSource(MetricID: number): Promise<Source[]> {
@@ -163,5 +165,48 @@ export class ServiceMaster {
 
         return await this.http.get("http://simonpalsandbox.azurewebsites.net/api/v2/sources?ids=" + MetricID, options).toPromise()
             .then(response => response.json() as Source[]);
+    }
+
+    public hideMetrics(Metrics: number[])
+    {
+        var headers = new Headers();
+
+
+        headers.append('Content-Type', 'application/json');
+        headers.append('Authorization', 'Basic d9448c61-936d-4717-8aa8-cba9a4903d57');
+        let options = new RequestOptions({ headers: headers });
+
+        this.http.put(this.publishedURL + "/hide/" + Metrics.toString(), options).subscribe(
+            data => {
+                return true;
+            },
+            error => {
+                console.error("Error saving!");
+                //return Observable.throw(error);
+            }
+        );;
+    }
+
+    public async publishedPost(m: Metric): Promise<boolean> {
+
+        var headers = new Headers();
+
+
+        headers.append('Content-Type', 'application/json');
+        headers.append('Authorization', 'Basic d9448c61-936d-4717-8aa8-cba9a4903d57');
+        let options = new RequestOptions({ headers: headers });
+        var response = false;
+        var url = this.publishedURL + "/update";
+        var body = JSON.stringify(m);
+        this.http.put(url, body, options).subscribe(
+            data => {
+                response = true;
+            },
+            error => {
+                console.error("Error saving!");
+                //return Observable.throw(error);
+            }
+        );
+        return response;
     }
 }
