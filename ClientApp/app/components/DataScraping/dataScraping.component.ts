@@ -20,11 +20,11 @@ export class DataScrapingComponent {
         this.http = http;
         this.Search = false;
         this.edited = false;
+
     }
 
     ngOnInit() {
         this.svc.getScrapping();
-
 
     }
 }

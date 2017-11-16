@@ -19,6 +19,7 @@ export class ServiceMaster {
     public publishedEditMetric: Metric;
     public baseUrl: string;
     public scrappingMetrics: ScrappingMetric[];
+    public result: string;
    
 
     constructor(http: Http, private router: Router, @Inject('BASE_URL') baseUrl: string) {
@@ -214,8 +215,8 @@ export class ServiceMaster {
     }
 
     public  getScrapping() {
-        return this.http.get(this.baseUrl + '/DataScrappingController').subscribe(response => {
-            this.scrappingMetrics = response.json() as ScrappingMetric[]
+        return this.http.get(this.baseUrl + 'api/scraping/DataScrapping').subscribe(response => {
+            this.scrappingMetrics = response.json() as ScrappingMetric[]  
         });
     }
 }

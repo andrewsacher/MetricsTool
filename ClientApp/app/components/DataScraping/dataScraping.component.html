@@ -8,6 +8,33 @@
     <div class="row">
         <div class='col-sm-2'>
             <nav-menu></nav-menu>
+     
+        </div>
+        <div style="display:flex">
+       <div class="header-row">
+        <h1>Data Scraping</h1>
+           </div>
+            </div>
+        <div style="display:flex" class="col-lg-offset-2">
+
+            <table class="table table-hover" style="width: 75%; height:100%" >
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>ID</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let scrappingMetric of svc.scrappingMetrics">
+                        <td>{{scrappingMetric.name}}</td>
+                        <td>{{scrappingMetric.id}}</td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+            <form></form>
         </div>
     </div>
 </body>

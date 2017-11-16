@@ -45,6 +45,9 @@ namespace angular4Template
 
             app.UseMvc(routes =>
             {
+                routes.MapRoute(name: "ScrapingApiRoute",
+                   template: "api/scraping/{action}/{id?}",
+                   defaults: new { controller = "DataScrapping", action = "Index" });
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
@@ -52,6 +55,7 @@ namespace angular4Template
                 routes.MapSpaFallbackRoute(
                     name: "spa-fallback",
                     defaults: new { controller = "Home", action = "Index" });
+                
             });
         }
     }
