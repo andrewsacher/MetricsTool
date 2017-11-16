@@ -41,3 +41,8 @@ export class Meta {
     public type: string;
     public data: string;
 }
+
+export class ScrappingMetric {
+    public name: string;
+    public id: string;
+}

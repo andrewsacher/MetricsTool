@@ -1,9 +1,9 @@
-﻿import { Injectable } from '@angular/core';
+﻿import { Injectable, Inject } from '@angular/core';
 import { Http } from '@angular/http';
 import { Headers, RequestOptions } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import 'rxjs/add/operator/toPromise';
-import { Metric, Source } from '../Models/Models';
+import { Metric, Source, ScrappingMetric } from '../Models/Models';
 import { toPromise } from "rxjs/operator/toPromise";
 
 @Injectable()
@@ -17,13 +17,16 @@ export class ServiceMaster {
     public stagingURL: string;
     public publishedURL: string;
     public publishedEditMetric: Metric;
+    public baseUrl: string;
+    public scrappingMetrics: ScrappingMetric[];
    
 
-    constructor(http: Http, private router: Router) {
+    constructor(http: Http, private router: Router, @Inject('BASE_URL') baseUrl: string) {
         this.http = http;
         this.loggedIn = false;
         this.stagingURL = 'http://simonpalsandbox.azurewebsites.net/api/v2/metrics';
         this.publishedURL = 'http://simonpalsandbox.azurewebsites.net/api/v2/metrics';
+        this.baseUrl = baseUrl;
     }
 
     public async login(email: string, password: string): Promise<boolean> {
@@ -208,5 +211,11 @@ export class ServiceMaster {
             }
         );
         return response;
+    }
+
+    public  getScrapping() {
+        return this.http.get(this.baseUrl + '/DataScrappingController').subscribe(response => {
+            this.scrappingMetrics = response.json() as ScrappingMetric[]
+        });
     }
 }

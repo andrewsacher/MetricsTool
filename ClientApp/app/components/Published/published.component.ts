@@ -23,10 +23,8 @@ export class PublishedComponent {
     }
 
     ngOnInit() {
-        if (this.svc.publishedMetrics == null)
-        {
+
             this.svc.getPublished();
-        }
         
         
     }
