@@ -96,6 +96,18 @@ namespace angular4Template.Controllers
                     Id = "caf44362-57d9-47c5-92ee-fe3ba7d95bda"
                 };
                 list.Add(scrap);
+                scrap = new ScrappingMetric()
+                {
+                    Name = "(unadj) Employed - Wage and salary workers, Professional and business services",
+                    Id = "ef82619a-2458-498b-9819-b434246cd0e7"
+                };
+                list.Add(scrap);
+                scrap = new ScrappingMetric()
+                {
+                    Name = "(unadj) Employed - Wage and salary workers, Professional and business services",
+                    Id = "7ee10cd0-5483-49f7-adc3-b073e6c44b4d"
+                };
+                list.Add(scrap);
             return Json(list);
         }
         catch (Exception ex)
