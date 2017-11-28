@@ -73,7 +73,7 @@
 
                 </div>
                 <div class="modal-body" *ngIf="metricEdit">
-
+                    
                     <form>
 
                         <div class="col-sm-8 col-sm-offest-1">
@@ -120,7 +120,7 @@
                         </div>
                         <div class="col-sm-12 col-sm-offest-1" *ngFor="let meta of metricEdit.meta">
                             <div class="form-group label-floating">
-                                <label style="width:30%" class="control-label">{{meta.type}}:</label><textarea rows="5" class="form-control" type="text" name="data" value="{{meta.data}}" [(ngModel)]="meta.data"></textarea>
+                                <label style="width:30%" class="control-label">{{meta.type}}:</label><textarea rows="5" class="form-control" type="text"  value="{{meta.data}}" [(ngModel)]="meta.data"></textarea>
                             </div>
                         </div>
                         <div class="col-sm-20 col-sm-offest-1" *ngFor="let Source of sources">
@@ -138,17 +138,24 @@
                         <label style="width:30%" class="control-label">Is Featured:  </label> <input type="checkbox" name="isFeatured" checked="{{metricEdit.is_featured}}" [(ngModel)]="metricEdit.is_featured">
                     </div>
                 </div>
-                </form>
+                   
+            </form>
+                    <div class="pull-left">
+                        <button *ngIf="!def" type="button" class="btn btn-success" (click)="addDef()">Add Definition</button>
+                        <button *ngIf="!foot" type="button" class="btn btn-success" (click)="addFoot()">Add Footnote</button>
+                    </div>
             </div>
                 <br />
                 <div class="modal-footer">
-                    <div class="pull-right">
-                        <button type="button" class="btn" style="background-color:#4285F4" data-dismiss="modal" (click)="submit()">Submit</button>
-                        <button type="button" class="btn btn-danger " data-dismiss="modal" (click)="clearModal()">Close</button>
+                    
+                        <div class="pull-right">
+                            <button  type="button" class="btn btn-primary"  data-dismiss="modal" (click)="submit()">Submit</button>
+                            <button  type="button" class="btn btn-danger " data-dismiss="modal" (click)="clearModal()">Close</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+
 
