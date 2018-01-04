@@ -24,7 +24,11 @@ export class UploadFileComponent {
             m.name = "--Choose SheetType--";
             this.spreadSheets.unshift(m);
             this.selectedType = this.spreadSheets[0];
-        })
+        });
+    }
+
+    onSelect(newSpreadSheet: SpreadSheet) {  
+        this.selectedType = newSpreadSheet;
     }
 
   
