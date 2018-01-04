@@ -28,7 +28,8 @@ export class Source {
     public agency: string;
     public sources: SourceDetails[];
     public description: string;
-    public ID: number
+    public id: number;
+    public name: string;
 
 }
 
@@ -45,4 +46,15 @@ export class Meta {
 export class ScrappingMetric {
     public name: string;
     public id: string;
+}
+
+export class Profile {
+    public FirstName: string;
+    public LastName: string;
+    public Email: string;
+    public Password: string;
+    public SessionId: string;
+    public id: string;
+    public key: string;
+
 }

@@ -15,8 +15,8 @@
             <h1>Staging Metric's</h1>
             <form>
                 <div class="row" style="padding-left:10px">
-                    <label >Search:</label>
-                    <input class="form-control" placeholder="Search Metric ID" name="SearchID" [(ngModel)]="SearchID">
+                    <label>Search:</label>
+                    <input class="form-control" placeholder="Search a Metric ID" name="SearchID" [(ngModel)]="SearchID">
                     <button class="btn btn-info"><span class="glyphicon glyphicon-search" (click)="search()"> Search</span></button>
                     <button *ngIf="Search" class="btn btn-success" (click)="back()"><span class="glyphicon glyphicon-arrow-left"> Back</span></button>
                 </div>
@@ -28,20 +28,26 @@
 
     <div style="display:flex" class="col-lg-offset-2">
 
-        <table class="table table-hover" style="width: 75%; height:100%" *ngIf="svc.stagingMetrics">
+        <table class="table table-hover" style="width: 75%; height:100%" *ngIf="stagingMetrics">
             <thead>
                 <tr>
+                    <th></th>
                     <th>Lexicon Name</th>
                     <th>Publish</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngIf="svc.stagingMetrics.length == 0">
+                <tr *ngIf="stagingMetrics.length == 0">
                     <td>
                         No Metrics Found
                     </td>
                 </tr>
-                <tr *ngFor="let metric of svc.stagingMetrics">
+                <tr *ngFor="let metric of stagingMetrics">     
+                    <td *ngIf="metric.children.length == 0"></td>
+                    <td *ngIf="metric.children.length != 0"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                     <path fill="#000000" d="M16,13C15.71,13 15.38,13 15.03,13.05C16.19,13.89 17,15 17,16.5V19H23V16.5C23,14.17 18.33,13 16,13M8,13C5.67,13 1,14.17 1,16.5V19H15V16.5C15,14.17 10.33,13 8,13M8,11A3,3 0 0,0 11,8A3,3 0 0,0 8,5A3,3 0 0,0 5,8A3,3 0 0,0 8,11M16,11A3,3 0 0,0 19,8A3,3 0 0,0 16,5A3,3 0 0,0 13,8A3,3 0 0,0 16,11Z" />
+                       </svg></td>
                     <td>{{ metric.lexicon_name }}</td>
                     <td>
                         <div class="form-check">
@@ -52,18 +58,59 @@
                     </td>
                     <td><a data-toggle="modal" data-target="#myModalEdit" (click)="SelectedModal(metric)"> <span data-toggle="tooltip" title="Edit" class="glyphicon glyphicon-pencil warning" style="cursor: pointer; color: #ffbb33"></span></a></td>
                 </tr>
-                <tr *ngIf="svc.stagingMetrics.length != 0">
+                <tr *ngIf="stagingMetrics.length != 0">
                     <td></td>
-                    <td><button *ngIf="svc.stagingMetrics.length != 0" class="btn btn-primary">Publish Checked</button></td>
+                    <td><button *ngIf="stagingMetrics.length != 0" class="btn btn-primary">Publish Checked</button></td>
                 </tr>
             </tbody>
         </table>
-        
+
+
+    </div>
+    <div style="display:flex" class="col-lg-offset-2">
+        <table table class="table table-hover" style="width: 75%; height:100%" *ngIf="Search && stagingChildren[0].id != -1">
+            <caption>Children</caption>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Lexicon Name</th>
+                    <th>Publish</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody >
+                <tr  *ngFor="let metric of stagingChildren">
+                    <td *ngIf="metric.children.length == 0">
+                        <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                            <path fill="#000000" d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z" />
+                        </svg>
+                    </td>
+                    <td *ngIf="metric.children.length != 0">
+                        <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                            <path fill="#000000" d="M16,13C15.71,13 15.38,13 15.03,13.05C16.19,13.89 17,15 17,16.5V19H23V16.5C23,14.17 18.33,13 16,13M8,13C5.67,13 1,14.17 1,16.5V19H15V16.5C15,14.17 10.33,13 8,13M8,11A3,3 0 0,0 11,8A3,3 0 0,0 8,5A3,3 0 0,0 5,8A3,3 0 0,0 8,11M16,11A3,3 0 0,0 19,8A3,3 0 0,0 16,5A3,3 0 0,0 13,8A3,3 0 0,0 16,11Z" />
+                        </svg>
+                    </td>
+                    <td>{{ metric.lexicon_name }}</td>
+                    <td>
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input *ngIf="metric.id != -1" type="checkbox" value="{{metric.id}}" class="form-check-input" data-toggle="tooltip" title="Publish" style="cursor:pointer">
+                            </label>
+                        </div>
+                    </td>
+                    <td><a data-toggle="modal" data-target="#myModalEdit" (click)="SelectedModal(metric)"> <span data-toggle="tooltip" title="Edit" class="glyphicon glyphicon-pencil warning" style="cursor: pointer; color: #ffbb33"></span></a></td>
+                </tr>
+                <tr *ngIf="stagingChildren.length != 0">
+                    <td></td>
+                    <td><button *ngIf="stagingChildren.length != 0" class="btn btn-primary">Publish Checked</button></td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
 
 </body>
-<div id="myModalEdit" class="modal fade" role="dialog">
+<div id="myModalEdit" class="modal fade" role="dialog" style="z-index: 9997;">
     <div class="col-md-10 pull-right">
         <div class="modal-content" style="width: 60%">
             <div class="modal-dialog" role="document">
@@ -73,7 +120,7 @@
 
                 </div>
                 <div class="modal-body" *ngIf="metricEdit">
-                    
+
                     <form>
 
                         <div class="col-sm-8 col-sm-offest-1">
@@ -120,42 +167,74 @@
                         </div>
                         <div class="col-sm-12 col-sm-offest-1" *ngFor="let meta of metricEdit.meta">
                             <div class="form-group label-floating">
-                                <label style="width:30%" class="control-label">{{meta.type}}:</label><textarea rows="5" class="form-control" type="text"  value="{{meta.data}}" [(ngModel)]="meta.data"></textarea>
+                                <label style="width:30%" class="control-label">{{meta.type}}:</label><textarea rows="5" name="{{meta.type}}" class="form-control" type="text" value="{{meta.data}}" [(ngModel)]="meta.data"></textarea>
                             </div>
                         </div>
                         <div class="col-sm-20 col-sm-offest-1" *ngFor="let Source of sources">
-                        <div class="form-group label-floating">
-                            <label style="width:30%" class="control-label"><strong>Source:</strong></label>
-                            <div class="col-sm-20 col-sm-offest-1" *ngFor="let s of Source.sources">
-                                <div class="form-group label-floating">
-                                    <label style="width:30%" class="control-label"></label><textarea row ="5"class="form-control" type="text" name="url" value="{{s.source}}" [(ngModel)]="s.source">: {{s.url}}</textarea>
+                            <div class="form-group label-floating">
+                                <label style="width:30%" class="control-label"><strong>Source:</strong></label>
+                                <div class="col-sm-20 col-sm-offest-1" *ngFor="let s of Source.sources">
+                                    <div class="form-group label-floating">
+                                        <label style="width:30%" class="control-label"></label><textarea row="5" class="form-control" type="text" name="url" value="{{s.source}}" [(ngModel)]="s.source">: {{s.url}}</textarea>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        </div>
+                        <div class="col-sm-6 col-sm-offest-1">
+                            <div class="form-group label-floating">
+                                <label style="width:30%" class="control-label">Is Featured:  </label> <input type="checkbox" name="isFeatured" checked="{{metricEdit.is_featured}}" [(ngModel)]="metricEdit.is_featured">
                             </div>
-                <div class="col-sm-6 col-sm-offest-1">
-                    <div class="form-group label-floating">
-                        <label style="width:30%" class="control-label">Is Featured:  </label> <input type="checkbox" name="isFeatured" checked="{{metricEdit.is_featured}}" [(ngModel)]="metricEdit.is_featured">
-                    </div>
-                </div>
-                   
-            </form>
+                        </div>
+
+                    </form>
                     <div class="pull-left">
                         <button *ngIf="!def" type="button" class="btn btn-success" (click)="addDef()">Add Definition</button>
                         <button *ngIf="!foot" type="button" class="btn btn-success" (click)="addFoot()">Add Footnote</button>
+                        <button type="button" class="btn btn-success" (click)="getAllSource()" data-toggle="modal" data-target="#mySourceModal">Add sources</button>
                     </div>
-            </div>
+                </div>
                 <br />
                 <div class="modal-footer">
-                    
-                        <div class="pull-right">
-                            <button  type="button" class="btn btn-primary"  data-dismiss="modal" (click)="submit()">Submit</button>
-                            <button  type="button" class="btn btn-danger " data-dismiss="modal" (click)="clearModal()">Close</button>
-                        </div>
+
+                    <div class="pull-right">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="submit()">Submit</button>
+                        <button type="button" class="btn btn-danger " data-dismiss="modal" (click)="clearModal()" >Close</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
+
+<div id="mySourceModal" class="modal fade" role="dialog" style="z-index: 9998;">
+    <div class="col-md-10 pull-right">
+        <div class="modal-content" style="width: 60%">
+            <div class="modal-dialog" role="document">
+                <div class="modal-header text-center row" >
+                    <button type="button" class="close" data-dismiss="modal" (click)="clearModal()"><span style="color:#ff4444">&times;</span> </button>
+                    <h4 class="modal-title">Add Sources</h4>
+
+                </div>
+                <div class="modal-body" *ngIf="allSources">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Agency</th>
+                                <th>Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let source of allSources">
+                                <td>source.agency</td>
+                                <td>source.name</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+            </div>
+</div>
+</div>
+
 
 

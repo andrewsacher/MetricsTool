@@ -12,6 +12,7 @@ import { StagingComponent } from './components/Staging/staging.component';
 import { LoginComponent } from './components/Login/Login.component';
 import { ServiceMaster } from './components/Services/ServiceMaster';
 import { LoggedInGuard } from './components/Services/LoggedInGuard';
+import { ProfileComponent } from './components/Profile/profile.component';
 
 @NgModule({
     declarations: [
@@ -20,7 +21,8 @@ import { LoggedInGuard } from './components/Services/LoggedInGuard';
         StagingComponent,
         DataScrapingComponent,
         PublishedComponent,
-        LoginComponent
+        LoginComponent,
+        ProfileComponent,
     ],
     imports: [
         CommonModule,
@@ -32,6 +34,7 @@ import { LoggedInGuard } from './components/Services/LoggedInGuard';
             { path: 'staging', component: StagingComponent, canActivate: [LoggedInGuard] },
             { path: 'data-scraping', component: DataScrapingComponent, canActivate: [LoggedInGuard] },
             { path: 'login', component: LoginComponent },
+            { path: 'profile', component: ProfileComponent, canActivate: [LoggedInGuard] },
             { path: '**', redirectTo: 'login' }
         ])
     ],

@@ -19,6 +19,10 @@ export class StagingComponent {
     me: Meta;
     def: boolean;
     foot: boolean;
+    stagingMetrics: Metric[];
+    stagingChildren: Metric[];
+    allSources: Source[];
+
     constructor(service: ServiceMaster, http: Http) {
         this.svc = service;
         this.http = http;
@@ -29,20 +33,40 @@ export class StagingComponent {
     }
 
     ngOnInit() {
-            this.svc.getStaging();
+        this.svc.getStaging().then(response => {
+            this.stagingMetrics =  response
+        });
 
 
     }
 
-    search() {
+    async search() {
         this.Search = true;
-        this.svc.getStagingSearch(this.SearchID);
+        await this.svc.getStagingSearch(this.SearchID).then(response => {
+            this.stagingMetrics = response
+        });
+        if (this.stagingMetrics[0].children.length != 0)
+        { 
+        this.svc.getStagingChildren(this.stagingMetrics[0]).then(response => {
+            this.stagingChildren = response
+        });
+        }
+        else {
+            var m = new Metric();
+            m.id = -1;
+            this.stagingChildren[0] = m;
+        }
+
+
     }
 
     back() {
         this.Search = false;
         this.SearchID = "";
-        this.svc.getStaging();
+        this.svc.getStaging().then(response => {
+            this.stagingMetrics = response
+        });
+        
     }
 
     async SelectedModal(m: Metric) {
@@ -71,7 +95,9 @@ export class StagingComponent {
 
     }
     clearModal() {
-        this.metricEdit = new Metric();
+        this.metricEdit = new Metric(); 
+        this.foot = false;
+        this.def = false;
     }
     async submit()
     {
@@ -97,5 +123,11 @@ export class StagingComponent {
         this.meta.data = ""
         this.metricEdit.meta[this.metricEdit.meta.length] = this.meta;
         this.foot = true;
+    }
+
+    async getAllSource() {
+        await this.svc.GetAllStagingSources().then(async response => {
+            this.allSources = await response
+        });
     }
 }

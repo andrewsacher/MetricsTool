@@ -3,7 +3,7 @@ import { Http } from '@angular/http';
 import { Headers, RequestOptions } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import 'rxjs/add/operator/toPromise';
-import { Metric, Source, ScrappingMetric } from '../Models/Models';
+import { Metric, Source, ScrappingMetric, Profile } from '../Models/Models';
 import { toPromise } from "rxjs/operator/toPromise";
 
 @Injectable()
@@ -20,6 +20,9 @@ export class ServiceMaster {
     public baseUrl: string;
     public scrappingMetrics: ScrappingMetric[];
     public result: string;
+    public stagingChildren: Metric[];
+    public parentIds: number[];
+    public profile: Profile;
    
 
     constructor(http: Http, private router: Router, @Inject('BASE_URL') baseUrl: string) {
@@ -30,7 +33,7 @@ export class ServiceMaster {
         this.baseUrl = baseUrl;
     }
 
-    public async login(email: string, password: string): Promise<boolean> {
+    public async login(Username: string, Password: string): Promise<boolean> {
         var headers = new Headers();
 
 
@@ -38,10 +41,13 @@ export class ServiceMaster {
         let options = new RequestOptions({ headers: headers });
 
         var url = 'http://simonpalsandbox.azurewebsites.net/api/v2/authentication';
-        return this.http.post(url, JSON.stringify({ email, password }), options).toPromise()
+        return this.http.post(url, JSON.stringify({ Username, Password }), options).toPromise()
             .then(response => {
                 this.loggedIn = true;
+                this.profile = response.json();
                 return Promise.resolve(this.loggedIn);
+                
+
             })
             .catch(error => {
                 this.loggedIn = false;
@@ -59,77 +65,77 @@ export class ServiceMaster {
     }
 
 
-    public getPublished()
+    public getPublished(): Promise<Metric[]>
     {
         var headers = new Headers();
 
 
         headers.append('Content-Type', 'application/json');
-        headers.append('Authorization', 'Basic d9448c61-936d-4717-8aa8-cba9a4903d57');
+        headers.append('Authorization', 'Basic ' + this.profile.SessionId);
         let options = new RequestOptions({ headers: headers });
-        this.http.get(this.publishedURL +'/', options).subscribe(result => {
-            this.publishedMetrics = result.json();
-            
-
-
-        });
+        return this.http.get(this.publishedURL + '/', options).toPromise()
+            .then(response => response.json() as Metric[]);
     }
 
-    public getPublishedSearch(id: String) {
+    public getPublishedSearch(id: String): Promise<Metric[]> {
         var headers = new Headers();
         
         headers.append('Content-Type', 'application/json');
-        headers.append('Authorization', 'Basic d9448c61-936d-4717-8aa8-cba9a4903d57');
+        headers.append('Authorization', 'Basic ' + this.profile.SessionId);
         let options = new RequestOptions({ headers: headers });
-        this.http.get(this.publishedURL + '?ids=' + id, options).subscribe(data => {
-            
-                this.publishedMetrics = data.json();  
-        });
+        return this.http.get(this.publishedURL + '?ids=' + id, options).toPromise()
+            .then(response => response.json() as Metric[]);
     }
 
     public async getPublishedEdit(id: String): Promise<Metric> {
         var headers = new Headers();
 
         headers.append('Content-Type', 'application/json');
-        headers.append('Authorization', 'Basic d9448c61-936d-4717-8aa8-cba9a4903d57');
+        headers.append('Authorization', 'Basic ' + this.profile.SessionId);
         let options = new RequestOptions({ headers: headers });
         return await this.http.get(this.publishedURL + '/' + id, options).toPromise()
             .then(response => response.json() as Metric);
         
     }
 
-    public getStaging() {
+    public getStaging(): Promise<Metric[]> {
         var headers = new Headers();
 
 
         headers.append('Content-Type', 'application/json');
-        headers.append('Authorization', 'Basic d9448c61-936d-4717-8aa8-cba9a4903d57');
+        headers.append('Authorization', 'Basic ' + this.profile.SessionId);
         let options = new RequestOptions({ headers: headers });
-        this.http.get(this.stagingURL + '/', options).subscribe(result => {
-            this.stagingMetrics = result.json();
-
-
-
-        });
+        return this.http.get(this.stagingURL + '/', options).toPromise()
+            .then(response => response.json() as Metric[]);
     }
 
-    public getStagingSearch(id: String) {
+    public async getStagingSearch(id: String):Promise<Metric[]> {
         var headers = new Headers();
         
         headers.append('Content-Type', 'application/json');
-        headers.append('Authorization', 'Basic d9448c61-936d-4717-8aa8-cba9a4903d57');
+        headers.append('Authorization', 'Basic ' + this.profile.SessionId);
         let options = new RequestOptions({ headers: headers });
-        this.http.get(this.stagingURL + '?ids=' + id, options).subscribe(data => {
+        return this.http.get(this.stagingURL + '?ids=' + id, options).toPromise()
+            .then(response => response.json() as Metric[]);
+    }
 
-            this.stagingMetrics = data.json();
-        });
+    public getStagingChildren(metric: Metric): Promise<Metric[]>
+    {
+
+        var headers = new Headers();
+
+        headers.append('Content-Type', 'application/json');
+        headers.append('Authorization', 'Basic ' + this.profile.SessionId);
+        let options = new RequestOptions({ headers: headers });
+        return this.http.get(this.stagingURL + '?ids=' + metric.children.toString(), options).toPromise()
+            .then(response => response.json() as Metric[]);
     }
 
     public async getStagingEdit(id: String): Promise<Metric> {
         var headers = new Headers();
 
         headers.append('Content-Type', 'application/json');
-        headers.append('Authorization', 'Basic d9448c61-936d-4717-8aa8-cba9a4903d57');
+        headers.append('Authorization', 'Basic ' + this.profile.SessionId);
         let options = new RequestOptions({ headers: headers });
         return await this.http.get(this.stagingURL + '/' + id, options).toPromise()
             .then(response => response.json() as Metric);
@@ -142,7 +148,7 @@ export class ServiceMaster {
 
 
         headers.append('Content-Type', 'application/json');
-        headers.append('Authorization', 'Basic d9448c61-936d-4717-8aa8-cba9a4903d57');
+        headers.append('Authorization', 'Basic ' + this.profile.SessionId);
         let options = new RequestOptions({ headers: headers });
         var response = false;
         var url = this.stagingURL + "/update";
@@ -164,7 +170,7 @@ export class ServiceMaster {
 
 
         headers.append('Content-Type', 'application/json');
-        headers.append('Authorization', 'Basic d9448c61-936d-4717-8aa8-cba9a4903d57');
+        headers.append('Authorization', 'Basic ' + this.profile.SessionId);
         let options = new RequestOptions({ headers: headers });
 
         return await this.http.get("http://simonpalsandbox.azurewebsites.net/api/v2/sources?ids=" + MetricID, options).toPromise()
@@ -177,7 +183,7 @@ export class ServiceMaster {
 
 
         headers.append('Content-Type', 'application/json');
-        headers.append('Authorization', 'Basic d9448c61-936d-4717-8aa8-cba9a4903d57');
+        headers.append('Authorization', 'Basic ' + this.profile.SessionId);
         let options = new RequestOptions({ headers: headers });
 
         this.http.put(this.publishedURL + "/hide/" + Metrics.toString(), options).subscribe(
@@ -191,18 +197,18 @@ export class ServiceMaster {
         );;
     }
 
-    public async publishedPost(m: Metric): Promise<boolean> {
+    public async profilePost(): Promise<boolean> {
 
         var headers = new Headers();
 
 
         headers.append('Content-Type', 'application/json');
-        headers.append('Authorization', 'Basic d9448c61-936d-4717-8aa8-cba9a4903d57');
+        headers.append('Authorization', 'Basic ' + this.profile.SessionId);
         let options = new RequestOptions({ headers: headers });
         var response = false;
-        var url = this.publishedURL + "/update";
-        var body = JSON.stringify(m);
-        this.http.put(url, body, options).subscribe(
+        var url = 'http://simonpalsandbox.azurewebsites.net/api/v2/authentication'; 
+        var body = JSON.stringify(this.profile);
+        this.http.post(url, body, options).subscribe(
             data => {
                 response = true;
             },
@@ -218,5 +224,18 @@ export class ServiceMaster {
         return this.http.get(this.baseUrl + 'api/scraping/DataScrapping').subscribe(response => {
             this.scrappingMetrics = response.json() as ScrappingMetric[]  
         });
+    }
+
+    public async GetAllStagingSources()
+    {
+        var headers = new Headers();
+
+
+        headers.append('Content-Type', 'application/json');
+        headers.append('Authorization', 'Basic ' + this.profile.SessionId);
+        let options = new RequestOptions({ headers: headers });
+
+        return await this.http.get("http://simonpalsandbox.azurewebsites.net/api/v2/sources", options).toPromise()
+            .then(response => response.json() as Source[]);
     }
 }
