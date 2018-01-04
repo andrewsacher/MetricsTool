@@ -3,7 +3,7 @@ import { Http } from '@angular/http';
 import { Headers, RequestOptions } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import 'rxjs/add/operator/toPromise';
-import { Metric, Source, ScrappingMetric, Profile } from '../Models/Models';
+import { Metric, Source, ScrappingMetric, Profile, SpreadSheet } from '../Models/Models';
 import { toPromise } from "rxjs/operator/toPromise";
 
 @Injectable()
@@ -237,5 +237,17 @@ export class ServiceMaster {
 
         return await this.http.get("http://simonpalsandbox.azurewebsites.net/api/v2/sources", options).toPromise()
             .then(response => response.json() as Source[]);
+    }
+
+    public async getSpreadSheets() {
+        var headers = new Headers();
+
+
+        headers.append('Content-Type', 'application/json');
+        headers.append('Authorization', 'Basic ' + this.profile.SessionId);
+        let options = new RequestOptions({ headers: headers });
+
+        return await this.http.get("http://simonpalsandbox.azurewebsites.net/api/v2/spreadsheets", options).toPromise()
+            .then(response => response.json() as SpreadSheet[]);
     }
 }

@@ -58,3 +58,8 @@ export class Profile {
     public key: string;
 
 }
+
+export class SpreadSheet {
+    public name: string;
+    public id: number;
+}
