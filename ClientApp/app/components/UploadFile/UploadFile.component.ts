@@ -21,9 +21,9 @@ export class UploadFileComponent {
             this.spreadSheets = response;
             var m = new SpreadSheet();
             m.id = -1;
-            m.name = "--Choose SheetType--";
+            m.SheetName = "--Choose Sheet Type--";
             this.spreadSheets.unshift(m);
-            this.selectedType = this.spreadSheets[0];
+            //this.selectedType = this.spreadSheets[0];
         });
     }
 

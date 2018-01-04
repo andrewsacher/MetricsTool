@@ -16,21 +16,29 @@
            
         </div>
        
+        
+    </div>
 
-    </div>
-    <div style="display:flex" class="col-lg-offset-2" *ngIf="spreadSheets">
+    <div style="display:flex; padding-top:25px" class="col-lg-offset-2" >
         <input id="file-field" name="file-field"  type="file" accept=".xlsx, .xltx, .xls">
-            <h3 style="width: auto">Sheet Type:</h3>
-            <div class="form-group">
-                <div style="width: auto; margin-left: 10px; padding-top: 10px">
-                    <select class="form-control " [ngModel]="selectedType"
-                            (ngModelChange)="onSelect($event)" style=" width: auto">
-                        <option *ngFor="let SpreadSheet of spreadSheets" [ngValue]="spreadSheet" class="">
-                            {{SpreadSheet.name}}
-                        </option>
-                    </select>
-                </div>
+        </div>
+    <div style="display:flex" class="col-lg-offset-2" *ngIf="spreadSheets">
+        <h3 style="width: auto">Sheet Type:</h3>
+        <div class="form-group">
+            <div style=" margin-left: 10px; padding-top: 15px">
+                <select class="form-control " [(ngModel)]="selectedType"
+                        (ngModelChange)="onSelect($event)" style=" width: 42%">
+                    <option *ngFor="let spreadSheet of spreadSheets" [ngValue]="SpreadSheet" class="">
+                        {{spreadSheet.SheetName}}
+                    </option>
+                </select>
             </div>
+        </div>
+        
     </div>
+    <div class="col-lg-offset-2" style="display:flex; padding-left:25px">
+        <button class="btn btn-success" >Upload</button>
+    </div>
+  
 
     </body>

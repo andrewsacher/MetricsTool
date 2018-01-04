@@ -60,6 +60,6 @@ export class Profile {
 }
 
 export class SpreadSheet {
-    public name: string;
+    public SheetName: string;
     public id: number;
 }
