@@ -10,6 +10,7 @@ import { Metric } from '../Models/Models';
 export class ProfileComponent {
     svc: ServiceMaster;
     saved: boolean;
+    loading: boolean;
     constructor(service: ServiceMaster)
     {
         this.svc = service;
@@ -22,11 +23,16 @@ export class ProfileComponent {
 
     Save()
     {
+        this.loading = true;
         this.svc.profilePost().then(response => {
             this.saved = response;
+            //this.loading = false;
             if (!this.saved)
             {
-
+                alert("Could not save profile");
+            }
+            else {
+                alert("Your changes have been saved");
             }
 
         });

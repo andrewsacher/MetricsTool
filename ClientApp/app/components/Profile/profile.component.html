@@ -42,7 +42,7 @@
                     <label class="control-label" style="width:100%"><span style="color:red">* </span>Password:  </label><input class="form-control" type="password" name="Password" value="{{svc.profile.Password}}" [(ngModel)]="svc.profile.Password">
                 </div>
             </div>
-            <button class="btn btn-success"(click)="Save()">Save</button>
+            <button ladda="loading" data-style="expand-right" class="btn btn-success"(click)="Save()">Save</button>
         </form>
     </div>
 

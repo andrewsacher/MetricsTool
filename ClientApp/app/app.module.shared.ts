@@ -13,6 +13,7 @@ import { LoginComponent } from './components/Login/Login.component';
 import { ServiceMaster } from './components/Services/ServiceMaster';
 import { LoggedInGuard } from './components/Services/LoggedInGuard';
 import { ProfileComponent } from './components/Profile/profile.component';
+import { UploadFileComponent } from './components/UploadFile/UploadFile.component';
 
 @NgModule({
     declarations: [
@@ -23,6 +24,7 @@ import { ProfileComponent } from './components/Profile/profile.component';
         PublishedComponent,
         LoginComponent,
         ProfileComponent,
+        UploadFileComponent,
     ],
     imports: [
         CommonModule,
@@ -35,6 +37,7 @@ import { ProfileComponent } from './components/Profile/profile.component';
             { path: 'data-scraping', component: DataScrapingComponent, canActivate: [LoggedInGuard] },
             { path: 'login', component: LoginComponent },
             { path: 'profile', component: ProfileComponent, canActivate: [LoggedInGuard] },
+            { path: 'upload_file', component: UploadFileComponent, canActivate: [LoggedInGuard] },
             { path: '**', redirectTo: 'login' }
         ])
     ],
