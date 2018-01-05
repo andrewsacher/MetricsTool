@@ -130,4 +130,23 @@ export class StagingComponent {
             this.allSources = await response
         });
     }
+
+    async goTo(id: number)
+    {
+        this.Search = true;
+        this.SearchID = id.toString(); 
+        await this.svc.getStagingSearch(this.SearchID).then(response => {
+            this.stagingMetrics = response
+        });
+        if (this.stagingMetrics[0].children.length != 0) {
+            this.svc.getStagingChildren(this.stagingMetrics[0]).then(response => {
+                this.stagingChildren = response
+            });
+        }
+        else {
+            var m = new Metric();
+            m.id = -1;
+            this.stagingChildren[0] = m;
+        }
+    }
 }
