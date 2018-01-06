@@ -27,12 +27,13 @@ export class ProfileComponent {
         this.svc.profilePost().then(response => {
             this.saved = response;
             //this.loading = false;
-            if (!this.saved)
+            if (this.saved)
             {
-                alert("Could not save profile");
+                alert("Your changes have been saved");
+                
             }
             else {
-                alert("Your changes have been saved");
+                alert("Could not save profile");
             }
 
         });

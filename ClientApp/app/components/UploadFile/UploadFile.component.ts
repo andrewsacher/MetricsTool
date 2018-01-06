@@ -11,8 +11,10 @@ export class UploadFileComponent {
     svc: ServiceMaster;
     spreadSheets: SpreadSheet[];
     selectedType: SpreadSheet;
+    selectedSheet: File;
     constructor(service: ServiceMaster)
     {
+
         this.svc = service;
     }
 
@@ -29,6 +31,12 @@ export class UploadFileComponent {
 
     onSelect(newSpreadSheet: SpreadSheet) {  
         this.selectedType = newSpreadSheet;
+    }
+
+    upload()
+    {
+        console.log(this.selectedType.SheetName);
+        console.log(this.selectedSheet.name);
     }
 
   

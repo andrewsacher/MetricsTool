@@ -20,7 +20,7 @@
     </div>
 
     <div style="display:flex; padding-top:25px" class="col-lg-offset-2" >
-        <input id="file-field" name="file-field"  type="file" accept=".xlsx, .xltx, .xls">
+        <input id="file-field" name="file-field"  type="file" accept=".xlsx, .xltx, .xls" value="{{selectedSheet}}" [(ngModel)]="selectedSheet">
         </div>
     <div style="display:flex" class="col-lg-offset-2" *ngIf="spreadSheets">
         <h3 style="width: auto">Sheet Type:</h3>
@@ -37,7 +37,7 @@
         
     </div>
     <div class="col-lg-offset-2" style="display:flex; padding-left:25px">
-        <button class="btn btn-success" >Upload</button>
+        <button class="btn btn-success" (click)="upload()" >Upload</button>
     </div>
   
 

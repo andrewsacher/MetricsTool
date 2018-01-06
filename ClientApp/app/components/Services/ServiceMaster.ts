@@ -206,7 +206,7 @@ export class ServiceMaster {
         headers.append('Authorization', 'Basic ' + this.profile.SessionId);
         let options = new RequestOptions({ headers: headers });
         var response = false;
-        var url = 'http://simonpalsandbox.azurewebsites.net/api/v2/authentication'; 
+        var url = 'http://simonpalsandbox.azurewebsites.net/api/v2/authentication/updateProfile'; 
         var body = JSON.stringify(this.profile);
         this.http.post(url, body, options).subscribe(
             data => {
