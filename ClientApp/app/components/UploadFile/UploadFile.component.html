@@ -20,7 +20,7 @@
     </div>
 
     <div style="display:flex; padding-top:25px" class="col-lg-offset-2" >
-        <input id="file-field" name="file-field"  type="file" accept=".xlsx, .xltx, .xls" value="{{selectedSheet}}" [(ngModel)]="selectedSheet">
+        <input id="file-field" name="file-field"  type="file" accept=".xlsx, .xltx, .xls" (change)="chooseFile($event)" >
         </div>
     <div style="display:flex" class="col-lg-offset-2" *ngIf="spreadSheets">
         <h3 style="width: auto">Sheet Type:</h3>
@@ -28,7 +28,7 @@
             <div style=" margin-left: 10px; padding-top: 15px">
                 <select class="form-control " [(ngModel)]="selectedType"
                         (ngModelChange)="onSelect($event)" style=" width: 42%">
-                    <option *ngFor="let spreadSheet of spreadSheets" [ngValue]="SpreadSheet" class="">
+                    <option *ngFor="let spreadSheet of spreadSheets" [ngValue]="spreadSheet" class="">
                         {{spreadSheet.SheetName}}
                     </option>
                 </select>
