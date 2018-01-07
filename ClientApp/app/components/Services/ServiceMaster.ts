@@ -206,7 +206,7 @@ export class ServiceMaster {
         headers.append('Authorization', 'Basic ' + this.profile.SessionId);
         let options = new RequestOptions({ headers: headers });
         var response = false;
-        var url = 'http://simonpalsandbox.azurewebsites.net/api/v2/authentication'; 
+        var url = 'http://simonpalsandbox.azurewebsites.net/api/v2/authentication/updateProfile'; 
         var body = JSON.stringify(this.profile);
         this.http.post(url, body, options).subscribe(
             data => {
@@ -239,7 +239,7 @@ export class ServiceMaster {
             .then(response => response.json() as Source[]);
     }
 
-    public async getSpreadSheets() {
+    public async getSpreadSheets(): Promise<SpreadSheet[]> {
         var headers = new Headers();
 
 
@@ -249,5 +249,27 @@ export class ServiceMaster {
 
         return await this.http.get("http://simonpalsandbox.azurewebsites.net/api/v2/spreadsheets", options).toPromise()
             .then(response => response.json() as SpreadSheet[]);
+    }
+
+    public async uploadFile(file: File, type: SpreadSheet) :Promise<boolean>
+    {
+        var response = false;
+        var headers = new Headers();
+        var formData = new FormData();
+        formData.append('uploadFile', file, file.name);
+
+        headers.append('Content-Type', 'multipart/form-data; charset=utf-8');
+        headers.append('Authorization', 'Basic ' + this.profile.SessionId);
+        let options = new RequestOptions({ headers: headers });
+        this.http.post("http://simonpalsandbox.azurewebsites.net/api/v2/metrics/uploadsheet/" + type.SheetName, formData, options).subscribe(
+            data => {
+                response = true;
+            },
+            error => {
+                console.error("Error saving!");
+                //return Observable.throw(error);
+            }
+        );
+        return response;
     }
 }
