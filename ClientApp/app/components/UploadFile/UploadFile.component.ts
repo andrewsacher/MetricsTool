@@ -14,6 +14,7 @@ export class UploadFileComponent {
     spreadSheets: SpreadSheet[];
     selectedType: SpreadSheet;
     selectedSheet: File;
+    uploaded: boolean;
     constructor(service: ServiceMaster)
     {
 
@@ -39,11 +40,16 @@ export class UploadFileComponent {
     {
         console.log(this.selectedType.SheetName);
         console.log(this.selectedSheet.name);
+        this.svc.uploadFile(this.selectedSheet, this.selectedType).then(response => {
+            this.uploaded = response;
+        });
+        
     }
 
     chooseFile(newFile: any)
     {
         this.selectedSheet = newFile.path[0].files[0];
+        
     }
 
   
