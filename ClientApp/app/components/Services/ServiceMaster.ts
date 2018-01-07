@@ -60,6 +60,28 @@ export class ServiceMaster {
 
 
     }
+
+    public logout(): Promise<boolean>
+    {
+        var headers = new Headers();
+
+
+        headers.append('Content-Type', 'application/json');
+        let options = new RequestOptions({ headers: headers });
+
+        var url = 'http://simonpalsandbox.azurewebsites.net/api/v2/authentication/LogOut';
+        return this.http.post(url, options).toPromise()
+            .then(response => {
+                this.loggedIn = false;
+                return Promise.resolve(this.loggedIn);
+
+
+            })
+            .catch(error => {
+                this.loggedIn = true;
+                return Promise.resolve(this.loggedIn);
+            });
+    }
     public isLoggedin() {
         return this.loggedIn;
     }

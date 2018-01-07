@@ -44,8 +44,12 @@ export class ProfileComponent {
 
     logout()
     {
-        this.svc.loggedIn = false;
-        this.router.navigate(['/login']);
+        this.svc.logout().then(response => {
+            if (response == false) {
+                this.router.navigate(['/login']);
+            }
+        });
+    
         
     }
 
