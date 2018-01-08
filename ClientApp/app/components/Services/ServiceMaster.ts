@@ -3,7 +3,7 @@ import { Http } from '@angular/http';
 import { Headers, RequestOptions } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import 'rxjs/add/operator/toPromise';
-import { Metric, Source, ScrappingMetric, Profile, SpreadSheet } from '../Models/Models';
+import { Metric, Source, ScrappingMetric, Profile, SpreadSheet, fileUpload } from '../Models/Models';
 import { toPromise } from "rxjs/operator/toPromise";
 
 @Injectable()
@@ -31,6 +31,7 @@ export class ServiceMaster {
         this.stagingURL = 'http://simonpalsandbox.azurewebsites.net/api/v2/metrics';
         this.publishedURL = 'http://simonpalsandbox.azurewebsites.net/api/v2/metrics';
         this.baseUrl = baseUrl;
+
     }
 
     public async login(Username: string, Password: string): Promise<boolean> {
@@ -280,10 +281,9 @@ export class ServiceMaster {
         var formData = new FormData();
         formData.append('uploadFile', file, file.name);
 
-        headers.append('Content-Type', 'multipart/form-data; charset=utf-8');
         headers.append('Authorization', 'Basic ' + this.profile.SessionId);
         let options = new RequestOptions({ headers: headers });
-        this.http.post("http://simonpalsandbox.azurewebsites.net/api/v2/metrics/uploadsheet/" + type.SheetName, formData, options).subscribe(
+        this.http.post("http://simonpalsandbox.azurewebsites.net/api/v2/upload/uploadSpreadsheet/" + type.SheetName, formData, options).subscribe(
             data => {
                 response = true;
             },
@@ -293,5 +293,17 @@ export class ServiceMaster {
             }
         );
         return response;
+    }
+
+    public async getAllUploaded(): Promise<fileUpload[]> {
+        var headers = new Headers();
+
+
+        headers.append('Content-Type', 'application/json');
+        headers.append('Authorization', 'Basic ' + this.profile.SessionId);
+        let options = new RequestOptions({ headers: headers });
+
+        return await this.http.get("http://simonpalsandbox.azurewebsites.net/api/v2/upload", options).toPromise()
+            .then(response => response.json() as fileUpload[]);
     }
 }

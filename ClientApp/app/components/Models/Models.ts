@@ -63,3 +63,10 @@ export class SpreadSheet {
     public SheetName: string;
     public id: number;
 }
+
+export class fileUpload {
+    public FileType: string;
+    public UploadedBy: string;
+    public UploadedTime: Date;
+    public name: string;
+}

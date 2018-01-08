@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ServiceMaster } from '../Services/ServiceMaster';
 import { Http } from '@angular/http';
-import { Metric, SpreadSheet } from '../Models/Models';
+import { Metric, SpreadSheet, fileUpload } from '../Models/Models';
 import { FormsModule } from '@angular/forms';
 import { Params } from '@angular/router';
 
@@ -15,6 +15,7 @@ export class UploadFileComponent {
     selectedType: SpreadSheet;
     selectedSheet: File;
     uploaded: boolean;
+    files: fileUpload[];
     constructor(service: ServiceMaster)
     {
 
@@ -30,6 +31,11 @@ export class UploadFileComponent {
             this.spreadSheets.unshift(m);
             this.selectedType = this.spreadSheets[0];
         });
+
+        this.svc.getAllUploaded().then(response => {
+            this.files = response;
+            console.log(this.files[0].UploadedTime);
+        });
     }
 
     onSelect(newSheet : SpreadSheet) {  
@@ -38,11 +44,20 @@ export class UploadFileComponent {
 
     upload()
     {
-        console.log(this.selectedType.SheetName);
-        console.log(this.selectedSheet.name);
-        this.svc.uploadFile(this.selectedSheet, this.selectedType).then(response => {
-            this.uploaded = response;
-        });
+        if (this.selectedType.id != -1) {
+            console.log(this.selectedType.SheetName);
+            console.log(this.selectedSheet.name);
+            this.svc.uploadFile(this.selectedSheet, this.selectedType).then(async response => {
+                this.uploaded = await response;
+                
+            });
+            this.svc.getAllUploaded().then(response => {
+                this.files = response;
+                console.log(this.files[0].UploadedTime);
+            });
+                
+        }
+        
         
     }
 

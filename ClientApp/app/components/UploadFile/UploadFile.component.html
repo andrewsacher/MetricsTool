@@ -39,6 +39,33 @@
     <div class="col-lg-offset-2" style="display:flex; padding-left:25px">
         <button class="btn btn-success" (click)="upload()" >Upload</button>
     </div>
+    <div  class="col-lg-offset-2" style="display:flex; padding-left:25px">
+        <table table class="table table-hover" style="width: 75%; height:100%" *ngIf="files">
+            <caption>Uploaded Files</caption>
+            <thead>
+                <tr>
+                    <th>File Type</th>
+                    <th>Name</th>
+                    <th>By</th>
+                    <th>Date </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let fileUpload of files">     
+                    <td>{{ fileUpload.FileType }}</td>
+                    
+                    <td> {{fileUpload.name}}</td>
+                    <td>
+                        {{fileUpload.UploadedBy}}
+                    </td>
+                   
+                    <td>
+                        {{fileUpload.UploadedTime | date : "fullDate" }}
+                    </td>
+                    
+            </tbody>
+        </table>
+    </div>
   
 
     </body>
