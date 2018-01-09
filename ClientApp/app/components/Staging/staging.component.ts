@@ -70,7 +70,7 @@ export class StagingComponent {
     }
 
     async SelectedModal(m: Metric) {
-        await this.svc.getPublishedEdit(m.id.toString()).then(async response => {
+        await this.svc.getStagingEdit(m.id.toString()).then(async response => {
             this.metricEdit = await response
 
         });
@@ -104,10 +104,10 @@ export class StagingComponent {
         await this.svc.stagingPost(this.metricEdit).then(async response => {
             this.edited = await response
         })
-        this.svc.getStaging();
-        this.Search = false;
+        //this.svc.getStaging();
+        //this.Search = false;
         console.log("editing" + this.metricEdit.id.toString());
-        this.SearchID = "";
+        //this.SearchID = "";
     }
     addDef() {
         this.meta = new Meta();
