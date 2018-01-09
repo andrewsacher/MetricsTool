@@ -28,7 +28,7 @@ export class ServiceMaster {
     constructor(http: Http, private router: Router, @Inject('BASE_URL') baseUrl: string) {
         this.http = http;
         this.loggedIn = false;
-        this.stagingURL = 'http://simonpalsandbox.azurewebsites.net/api/v2';
+        this.stagingURL = 'http://usafacts-api-staging.azurewebsites.net/api/v2';;
         this.publishedURL = 'http://simonpalsandbox.azurewebsites.net/api/v2';
         this.baseUrl = baseUrl;
 
@@ -151,7 +151,7 @@ export class ServiceMaster {
         headers.append('Content-Type', 'application/json');
         headers.append('Authorization', 'Basic ' + this.profile.SessionId);
         let options = new RequestOptions({ headers: headers });
-        return this.http.get(this.stagingURL + '?ids=' + metric.children.toString(), options).toPromise()
+        return this.http.get(this.stagingURL + '/metrics?ids=' + metric.children.toString(), options).toPromise()
             .then(response => response.json() as Metric[]);
     }
 

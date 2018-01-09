@@ -32,11 +32,11 @@ export class ProfileComponent {
             //this.loading = false;
             if (this.saved)
             {
-                alert("Your changes have been saved");
+               // alert("Your changes have been saved");
                 
             }
             else {
-                alert("Could not save profile");
+                //alert("Could not save profile");
             }
 
         });
