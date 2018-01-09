@@ -96,7 +96,7 @@ export class ServiceMaster {
         headers.append('Content-Type', 'application/json');
         headers.append('Authorization', 'Basic ' + this.profile.SessionId);
         let options = new RequestOptions({ headers: headers });
-        return this.http.get(this.publishedURL + '/metrics/', options).toPromise()
+        return this.http.get(this.publishedURL + '/metrics', options).toPromise()
             .then(response => response.json() as Metric[]);
     }
 
@@ -116,7 +116,7 @@ export class ServiceMaster {
         headers.append('Content-Type', 'application/json');
         headers.append('Authorization', 'Basic ' + this.profile.SessionId);
         let options = new RequestOptions({ headers: headers });
-        return await this.http.get(this.publishedURL + '/metrics/' + id, options).toPromise()
+        return await this.http.get(this.publishedURL + '/metrics' + id, options).toPromise()
             .then(response => response.json() as Metric);
         
     }
@@ -127,8 +127,9 @@ export class ServiceMaster {
 
         headers.append('Content-Type', 'application/json');
         headers.append('Authorization', 'Basic ' + this.profile.SessionId);
+        var url = this.stagingURL + '/metrics';
         let options = new RequestOptions({ headers: headers });
-        return this.http.get(this.stagingURL + '/metrics/', options).toPromise()
+        return this.http.get(url, options).toPromise()
             .then(response => response.json() as Metric[]);
     }
 
@@ -138,7 +139,7 @@ export class ServiceMaster {
         headers.append('Content-Type', 'application/json');
         headers.append('Authorization', 'Basic ' + this.profile.SessionId);
         let options = new RequestOptions({ headers: headers });
-        return this.http.get(this.stagingURL + 'metrics?ids=' + id, options).toPromise()
+        return this.http.get(this.stagingURL + '/metrics?ids=' + id, options).toPromise()
             .then(response => response.json() as Metric[]);
     }
 
@@ -209,7 +210,7 @@ export class ServiceMaster {
         headers.append('Authorization', 'Basic ' + this.profile.SessionId);
         let options = new RequestOptions({ headers: headers });
 
-        this.http.put(this.stagingURl + "/hide/" + Metrics.toString(), options).subscribe(
+        this.http.put(this.stagingURL + "/hide/" + Metrics.toString(), options).subscribe(
             data => {
                 return true;
             },
@@ -270,7 +271,7 @@ export class ServiceMaster {
         headers.append('Authorization', 'Basic ' + this.profile.SessionId);
         let options = new RequestOptions({ headers: headers });
 
-        return await this.http.get(this.stagingUrl + "/spreadsheets", options).toPromise()
+        return await this.http.get(this.stagingURL + "/spreadsheets", options).toPromise()
             .then(response => response.json() as SpreadSheet[]);
     }
 
@@ -283,7 +284,7 @@ export class ServiceMaster {
 
         headers.append('Authorization', 'Basic ' + this.profile.SessionId);
         let options = new RequestOptions({ headers: headers });
-        this.http.post(this.stagingUrl + "/upload/uploadSpreadsheet/" + type.SheetName, formData, options).subscribe(
+        this.http.post(this.stagingURL + "/upload/uploadSpreadsheet/" + type.SheetName, formData, options).subscribe(
             data => {
                 response = true;
             },
