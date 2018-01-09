@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { ServiceMaster } from '../Services/ServiceMaster';
 import { Http } from '@angular/http';
-import { Metric } from '../Models/Models';
+import { Metric } from '../Models/Models'; 
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'profile',
@@ -11,10 +12,12 @@ export class ProfileComponent {
     svc: ServiceMaster;
     saved: boolean;
     loading: boolean;
-    constructor(service: ServiceMaster)
+    router: Router;
+    constructor(service: ServiceMaster, r: Router)
     {
         this.svc = service;
         this.saved = false;
+        this.router = r;
     }
 
     ngOnInit() {
@@ -37,6 +40,17 @@ export class ProfileComponent {
             }
 
         });
+    }
+
+    logout()
+    {
+        this.svc.logout().then(response => {
+            if (response == false) {
+                this.router.navigate(['/login']);
+            }
+        });
+    
+        
     }
 
 } 

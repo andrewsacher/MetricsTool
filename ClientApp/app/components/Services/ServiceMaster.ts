@@ -3,7 +3,7 @@ import { Http } from '@angular/http';
 import { Headers, RequestOptions } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import 'rxjs/add/operator/toPromise';
-import { Metric, Source, ScrappingMetric, Profile, SpreadSheet } from '../Models/Models';
+import { Metric, Source, ScrappingMetric, Profile, SpreadSheet, fileUpload } from '../Models/Models';
 import { toPromise } from "rxjs/operator/toPromise";
 
 @Injectable()
@@ -28,9 +28,10 @@ export class ServiceMaster {
     constructor(http: Http, private router: Router, @Inject('BASE_URL') baseUrl: string) {
         this.http = http;
         this.loggedIn = false;
-        this.stagingURL = 'http://simonpalsandbox.azurewebsites.net/api/v2/metrics';
-        this.publishedURL = 'http://simonpalsandbox.azurewebsites.net/api/v2/metrics';
+        this.stagingURL = 'http://simonpalsandbox.azurewebsites.net/api/v2';
+        this.publishedURL = 'http://simonpalsandbox.azurewebsites.net/api/v2';
         this.baseUrl = baseUrl;
+
     }
 
     public async login(Username: string, Password: string): Promise<boolean> {
@@ -40,7 +41,7 @@ export class ServiceMaster {
         headers.append('Content-Type', 'application/json');
         let options = new RequestOptions({ headers: headers });
 
-        var url = 'http://simonpalsandbox.azurewebsites.net/api/v2/authentication';
+        var url = this.stagingURL + '/authentication';
         return this.http.post(url, JSON.stringify({ Username, Password }), options).toPromise()
             .then(response => {
                 this.loggedIn = true;
@@ -60,6 +61,28 @@ export class ServiceMaster {
 
 
     }
+
+    public logout(): Promise<boolean>
+    {
+        var headers = new Headers();
+
+
+        headers.append('Content-Type', 'application/json');
+        let options = new RequestOptions({ headers: headers });
+
+        var url = this.stagingURL + '/authentication/LogOut';
+        return this.http.post(url, options).toPromise()
+            .then(response => {
+                this.loggedIn = false;
+                return Promise.resolve(this.loggedIn);
+
+
+            })
+            .catch(error => {
+                this.loggedIn = true;
+                return Promise.resolve(this.loggedIn);
+            });
+    }
     public isLoggedin() {
         return this.loggedIn;
     }
@@ -73,7 +96,7 @@ export class ServiceMaster {
         headers.append('Content-Type', 'application/json');
         headers.append('Authorization', 'Basic ' + this.profile.SessionId);
         let options = new RequestOptions({ headers: headers });
-        return this.http.get(this.publishedURL + '/', options).toPromise()
+        return this.http.get(this.publishedURL + '/metrics', options).toPromise()
             .then(response => response.json() as Metric[]);
     }
 
@@ -83,7 +106,7 @@ export class ServiceMaster {
         headers.append('Content-Type', 'application/json');
         headers.append('Authorization', 'Basic ' + this.profile.SessionId);
         let options = new RequestOptions({ headers: headers });
-        return this.http.get(this.publishedURL + '?ids=' + id, options).toPromise()
+        return this.http.get(this.publishedURL + '/metrics?ids=' + id, options).toPromise()
             .then(response => response.json() as Metric[]);
     }
 
@@ -93,7 +116,7 @@ export class ServiceMaster {
         headers.append('Content-Type', 'application/json');
         headers.append('Authorization', 'Basic ' + this.profile.SessionId);
         let options = new RequestOptions({ headers: headers });
-        return await this.http.get(this.publishedURL + '/' + id, options).toPromise()
+        return await this.http.get(this.publishedURL + '/metrics' + id, options).toPromise()
             .then(response => response.json() as Metric);
         
     }
@@ -104,8 +127,9 @@ export class ServiceMaster {
 
         headers.append('Content-Type', 'application/json');
         headers.append('Authorization', 'Basic ' + this.profile.SessionId);
+        var url = this.stagingURL + '/metrics';
         let options = new RequestOptions({ headers: headers });
-        return this.http.get(this.stagingURL + '/', options).toPromise()
+        return this.http.get(url, options).toPromise()
             .then(response => response.json() as Metric[]);
     }
 
@@ -115,7 +139,7 @@ export class ServiceMaster {
         headers.append('Content-Type', 'application/json');
         headers.append('Authorization', 'Basic ' + this.profile.SessionId);
         let options = new RequestOptions({ headers: headers });
-        return this.http.get(this.stagingURL + '?ids=' + id, options).toPromise()
+        return this.http.get(this.stagingURL + '/metrics?ids=' + id, options).toPromise()
             .then(response => response.json() as Metric[]);
     }
 
@@ -137,7 +161,7 @@ export class ServiceMaster {
         headers.append('Content-Type', 'application/json');
         headers.append('Authorization', 'Basic ' + this.profile.SessionId);
         let options = new RequestOptions({ headers: headers });
-        return await this.http.get(this.stagingURL + '/' + id, options).toPromise()
+        return await this.http.get(this.stagingURL + '/metrics/' + id, options).toPromise()
             .then(response => response.json() as Metric);
 
     }
@@ -173,7 +197,7 @@ export class ServiceMaster {
         headers.append('Authorization', 'Basic ' + this.profile.SessionId);
         let options = new RequestOptions({ headers: headers });
 
-        return await this.http.get("http://simonpalsandbox.azurewebsites.net/api/v2/sources?ids=" + MetricID, options).toPromise()
+        return await this.http.get(this.stagingURL + "sources?ids=" + MetricID, options).toPromise()
             .then(response => response.json() as Source[]);
     }
 
@@ -186,7 +210,7 @@ export class ServiceMaster {
         headers.append('Authorization', 'Basic ' + this.profile.SessionId);
         let options = new RequestOptions({ headers: headers });
 
-        this.http.put(this.publishedURL + "/hide/" + Metrics.toString(), options).subscribe(
+        this.http.put(this.stagingURL + "/hide/" + Metrics.toString(), options).subscribe(
             data => {
                 return true;
             },
@@ -206,7 +230,7 @@ export class ServiceMaster {
         headers.append('Authorization', 'Basic ' + this.profile.SessionId);
         let options = new RequestOptions({ headers: headers });
         var response = false;
-        var url = 'http://simonpalsandbox.azurewebsites.net/api/v2/authentication/updateProfile'; 
+        var url = this.stagingURL + '/authentication/updateProfile'; 
         var body = JSON.stringify(this.profile);
         this.http.post(url, body, options).subscribe(
             data => {
@@ -235,7 +259,7 @@ export class ServiceMaster {
         headers.append('Authorization', 'Basic ' + this.profile.SessionId);
         let options = new RequestOptions({ headers: headers });
 
-        return await this.http.get("http://simonpalsandbox.azurewebsites.net/api/v2/sources", options).toPromise()
+        return await this.http.get(this.stagingURL + "/sources", options).toPromise()
             .then(response => response.json() as Source[]);
     }
 
@@ -247,7 +271,7 @@ export class ServiceMaster {
         headers.append('Authorization', 'Basic ' + this.profile.SessionId);
         let options = new RequestOptions({ headers: headers });
 
-        return await this.http.get("http://simonpalsandbox.azurewebsites.net/api/v2/spreadsheets", options).toPromise()
+        return await this.http.get(this.stagingURL + "/spreadsheets", options).toPromise()
             .then(response => response.json() as SpreadSheet[]);
     }
 
@@ -258,10 +282,9 @@ export class ServiceMaster {
         var formData = new FormData();
         formData.append('uploadFile', file, file.name);
 
-        headers.append('Content-Type', 'multipart/form-data; charset=utf-8');
         headers.append('Authorization', 'Basic ' + this.profile.SessionId);
         let options = new RequestOptions({ headers: headers });
-        this.http.post("http://simonpalsandbox.azurewebsites.net/api/v2/metrics/uploadsheet/" + type.SheetName, formData, options).subscribe(
+        this.http.post(this.stagingURL + "/upload/uploadSpreadsheet/" + type.SheetName, formData, options).subscribe(
             data => {
                 response = true;
             },
@@ -271,5 +294,17 @@ export class ServiceMaster {
             }
         );
         return response;
+    }
+
+    public async getAllUploaded(): Promise<fileUpload[]> {
+        var headers = new Headers();
+
+
+        headers.append('Content-Type', 'application/json');
+        headers.append('Authorization', 'Basic ' + this.profile.SessionId);
+        let options = new RequestOptions({ headers: headers });
+
+        return await this.http.get(this.stagingURL + "/upload", options).toPromise()
+            .then(response => response.json() as fileUpload[]);
     }
 }
