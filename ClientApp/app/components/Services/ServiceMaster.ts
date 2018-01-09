@@ -116,7 +116,7 @@ export class ServiceMaster {
         headers.append('Content-Type', 'application/json');
         headers.append('Authorization', 'Basic ' + this.profile.SessionId);
         let options = new RequestOptions({ headers: headers });
-        return await this.http.get(this.publishedURL + '/metrics' + id, options).toPromise()
+        return await this.http.get(this.publishedURL + '/metrics/' + id, options).toPromise()
             .then(response => response.json() as Metric);
         
     }
@@ -175,7 +175,7 @@ export class ServiceMaster {
         headers.append('Authorization', 'Basic ' + this.profile.SessionId);
         let options = new RequestOptions({ headers: headers });
         var response = false;
-        var url = this.stagingURL + "/update";
+        var url = this.stagingURL + "/metrics/update";
         var body = JSON.stringify(m);
         this.http.put(url, body, options).subscribe(
             data => {
@@ -197,7 +197,7 @@ export class ServiceMaster {
         headers.append('Authorization', 'Basic ' + this.profile.SessionId);
         let options = new RequestOptions({ headers: headers });
 
-        return await this.http.get(this.stagingURL + "sources?ids=" + MetricID, options).toPromise()
+        return await this.http.get(this.stagingURL + "/sources?ids=" + MetricID, options).toPromise()
             .then(response => response.json() as Source[]);
     }
 
