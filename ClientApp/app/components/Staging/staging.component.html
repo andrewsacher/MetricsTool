@@ -17,9 +17,7 @@
 
     </div>
     <div class="col-lg-offset-2" style="padding-left:10px; display:flex ">
-        <form style="width:20%">
-            
-                
+        <form>
                 <div class="form-inline">
                 <input class="form-control" placeholder="Search a Metric ID" name="SearchID" [(ngModel)]="SearchID">
                 <button class="btn btn-info"><span class="glyphicon glyphicon-search" (click)="search()"> </span></button>
@@ -32,7 +30,7 @@
 
     <div style="display:flex" class="col-lg-offset-2">
 
-        <table class="table table-hover" style="width: 75%; height:100%" *ngIf="stagingMetrics">
+        <table class="table table-hover" style="width: 75%; height:100%">
             <thead>
                 <tr>
                     <th></th>
@@ -42,8 +40,8 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngIf="stagingMetrics.length == 0">
-                    <td>
+                <tr *ngIf="!stagingMetrics">
+                    <td colspan="4">
                         No Metrics Found
                     </td>
                 </tr>
@@ -69,7 +67,8 @@
                 <tr *ngIf="stagingMetrics.length != 0">
                     <td></td>
                     <td></td>
-                    <td><button *ngIf="stagingMetrics.length != 0" class="btn btn-primary">Publish Checked</button></td>
+                    <td><button  style="display:none" *ngIf="stagingMetrics.length != 0" class="btn btn-primary">Publish Checked</button></td>
+                    <td></td>
                 </tr>
             </tbody>
         </table>
@@ -77,7 +76,7 @@
 
     </div>
     <div style="display:flex" class="col-lg-offset-2">
-        <table table class="table table-hover" style="width: 75%; height:100%" *ngIf="Search && stagingChildren[0].id != -1">
+        <table table class="table table-hover" style="width: 75%; height:100%">
             <caption>Children</caption>
             <thead>
                 <tr>
@@ -89,9 +88,6 @@
             </thead>
             <tbody>
                 <tr *ngFor="let metric of stagingChildren">
-                    <td *ngIf="metric.children.length == 0">
-                        
-                    </td>
                     <td *ngIf="metric.children.length != 0">
                        <a (click)="goTo(metric.id)" style="cursor: pointer">
                         <svg style="width:24px;height:24px" viewBox="0 0 24 24">
@@ -112,7 +108,8 @@
                 <tr *ngIf="stagingChildren.length != 0">
                     <td></td>
                     <td></td>
-                    <td><button *ngIf="stagingChildren.length != 0" class="btn btn-primary">Publish Checked</button></td>
+                    <td><button style="display:none" *ngIf="stagingChildren.length != 0" class="btn btn-primary">Publish Checked</button></td>
+                    <td></td>
                 </tr>
             </tbody>
         </table>
