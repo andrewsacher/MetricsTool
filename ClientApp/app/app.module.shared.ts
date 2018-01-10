@@ -32,12 +32,7 @@ import { LaddaModule } from 'angular2-ladda';
         CommonModule,
         HttpModule,
         FormsModule,
-        LaddaModule.forRoot({
-            style: "contract",
-            spinnerSize: 40,
-            spinnerColor: "red",
-            spinnerLines: 12
-        }),
+        LaddaModule,
         RouterModule.forRoot([
             { path: '', redirectTo: 'login', pathMatch: 'full' },
             { path: 'published', component: PublishedComponent, canActivate: [LoggedInGuard] },
