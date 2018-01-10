@@ -29,7 +29,7 @@ export class ServiceMaster {
         this.http = http;
         this.loggedIn = false;
         this.stagingURL = 'http://usafacts-api-staging.azurewebsites.net/api/v2';;
-        this.publishedURL = 'http://simonpalsandbox.azurewebsites.net/api/v2';
+        this.publishedURL = 'http://usafacts-api-staging.azurewebsites.net/api/v2';
         this.baseUrl = baseUrl;
 
     }
