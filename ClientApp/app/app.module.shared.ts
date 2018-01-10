@@ -14,6 +14,7 @@ import { ServiceMaster } from './components/Services/ServiceMaster';
 import { LoggedInGuard } from './components/Services/LoggedInGuard';
 import { ProfileComponent } from './components/Profile/profile.component';
 import { UploadFileComponent } from './components/UploadFile/UploadFile.component';
+import { LaddaModule } from 'angular2-ladda';    
 
 @NgModule({
     declarations: [
@@ -25,11 +26,18 @@ import { UploadFileComponent } from './components/UploadFile/UploadFile.componen
         LoginComponent,
         ProfileComponent,
         UploadFileComponent,
+
     ],
     imports: [
         CommonModule,
         HttpModule,
         FormsModule,
+        LaddaModule.forRoot({
+            style: "contract",
+            spinnerSize: 40,
+            spinnerColor: "red",
+            spinnerLines: 12
+        }),
         RouterModule.forRoot([
             { path: '', redirectTo: 'login', pathMatch: 'full' },
             { path: 'published', component: PublishedComponent, canActivate: [LoggedInGuard] },
