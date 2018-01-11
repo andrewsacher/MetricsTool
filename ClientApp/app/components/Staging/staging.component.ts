@@ -33,9 +33,13 @@ export class StagingComponent {
     }
 
     ngOnInit() {
-        //this.svc.getStaging().then(response => {
-        //    this.stagingMetrics =  response
-        //});
+
+        var m = new Metric();
+        m.id = -1;
+        this.stagingChildren = [m];
+        this.stagingMetrics = [m];
+
+        
     }
 
     async search() {
@@ -43,7 +47,7 @@ export class StagingComponent {
         await this.svc.getStagingSearch(this.SearchID).then(response => {
             this.stagingMetrics = response
         });
-        if (this.stagingMetrics.length > 0) {
+        if (this.stagingMetrics.length == 1 ) {
             if (this.stagingMetrics[0].children.length != 0) {
                 this.svc.getStagingChildren(this.stagingMetrics[0]).then(response => {
                     this.stagingChildren = response
@@ -55,14 +59,22 @@ export class StagingComponent {
                 this.stagingChildren[0] = m;
             }
         }
+        else {
+            var m = new Metric();
+            m.id = -1;
+            this.stagingChildren[0] = m;
+      
+        }
     }
 
     back() {
         this.Search = false;
         this.SearchID = "";
-        this.svc.getStaging().then(response => {
-            this.stagingMetrics = response
-        });
+        var m = new Metric();
+        m.id = -1;
+        this.stagingChildren[0] = m;
+        this.stagingMetrics[0] = m;
+        
         
     }
 
